@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import StaffModel from "../../Models/StaffModel";
 
 const Staff = () => {
   const [staffId, setStaffId] = useState("");
@@ -11,6 +12,12 @@ const Staff = () => {
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
 
+  const [staffs, setStaffs] = useState<StaffModel[]>([]);
+
+  const saveStaff = () =>{
+    setStaffs([...staffs,new StaffModel(staffId,firstName,lastName,dob,gender,joinDate,address,mobile,email)]);
+  }
+
   return (
     <>
       <div className="w-screen h-screen p-10">
@@ -18,7 +25,6 @@ const Staff = () => {
           STAFF MANAGE
         </h1>
         <form>
-          <div className="flex justify-center"></div>
 
           <div className="grid gap-6 mb-6 md:grid-cols-3">
             <div>
@@ -100,8 +106,8 @@ const Staff = () => {
                 onChange={(e) => setGender(e.target.value)}
               >
                 <option value=""> Gender</option>
-                <option value="CR001">MALE</option>
-                <option value="CR002">FEMALE</option>
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
@@ -181,6 +187,7 @@ const Staff = () => {
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={(e) => {
                 e.preventDefault();
+                saveStaff();
               }}
             >
               Save
@@ -226,22 +233,25 @@ const Staff = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {logs.map((log,index)=>(
+              {staffs.map((staff,index)=>(
                     <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                    <th className="px-6 py-4">
-                      {log.logCode}
+                      {staff.staffId}
                     </th>
                     <th className="px-6 py-4">
-                      {log.date}
+                      {staff.firstName}
                     </th>
                     <th className="px-6 py-4">
-                      {log.field}
+                      {staff.gender}
                     </th>
                     <th className="px-6 py-4">
-                      {log.crop}
+                      {staff.address}
                     </th>
                     <th className="px-6 py-4">
-                      {log.staff}
+                      {staff.mobile}
+                    </th>
+                    <th className="px-6 py-4">
+                      {staff.email}
                     </th>
                     <td className="px-6 py-4 flex gap-4">
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
@@ -262,7 +272,7 @@ const Staff = () => {
                     </span>
                   </td>
                 </tr>
-                    ))} */}
+                    ))}
             </tbody>
           </table>
         </div>
