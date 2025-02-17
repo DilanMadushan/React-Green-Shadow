@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import VehicleModel from '../../Models/VehicleModel';
+import Swal from "sweetalert2";
 
 const Vehicle = () => {
 
@@ -15,6 +16,22 @@ const Vehicle = () => {
         const newVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status);
         setVehicles([...vehicles, newVehicle]);
     };
+
+    const deleteVehicle = (code: string) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              setVehicles(vehicles.filter((vehicle)=>(vehicle.vehicleCode != code)))
+            }
+          });
+    }
   
   return (
     <>
@@ -181,8 +198,9 @@ const Vehicle = () => {
                     </span>
                     <span
                       className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
-                      onClick={() => {
-                       
+                      onClick={(e) => {
+                       e.preventDefault();
+                       deleteVehicle(vehicle.vehicleCode);
                       }}
                     >
                       Delete
