@@ -32,6 +32,25 @@ const Vehicle = () => {
             }
           });
     }
+
+    const editVehicle = (vehicle:VehicleModel) => {
+        setVehicleCode(vehicle.vehicleCode)
+        setPlateNumber(vehicle.plateNumber)
+        setCategory(vehicle.categary)
+        setFualType(vehicle.fuelType)
+        setStatus(vehicle.status)
+    }
+
+    const updateVehicle = () => {
+        const updatedVehicles = vehicles.map((vehicle) => {
+            if (vehicle.vehicleCode === vehicleCode) {
+                return new VehicleModel(vehicleCode,plateNumber,category,fualType,status);
+            } else {
+                return vehicle;
+            }
+        });
+        setVehicles(updatedVehicles); 
+    }
   
   return (
     <>
@@ -152,7 +171,7 @@ const Vehicle = () => {
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={(e) => {
                 e.preventDefault();
-               
+                updateVehicle();
               }}
             >
               Update
@@ -193,7 +212,11 @@ const Vehicle = () => {
                   <th className="px-6 py-4">{vehicle.fuelType}</th>
                   <th className="px-6 py-4">{vehicle.status}</th>
                   <td className="px-6 py-4 flex gap-4">
-                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" onClick={() => {updateCrop(crop.cropCode)}}>
+                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" 
+                    onClick={(e) => {
+                        e.preventDefault();
+                        editVehicle(vehicle);
+                    }}>
                       Edit
                     </span>
                     <span
