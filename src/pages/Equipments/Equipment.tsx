@@ -32,6 +32,24 @@ const Equipment = () => {
     });
   }
 
+  const editEquipment = (equipment:EquipmentModel) => {
+    setEquipmentId(equipment.equipmentId)
+    setName(equipment.name)
+    setType(equipment.type)
+    setStatus(equipment.status)
+  }
+
+  const updateEquipment = () => {
+    const updatedEquipments = equipments.map((equipment) => {
+      if (equipment.equipmentId === equipmentId) {
+        return new EquipmentModel(equipmentId,name,type,status);
+      } else {
+        return equipment;
+      }
+    });
+    setEquipments(updatedEquipments);
+  }
+
   return (
     <>
       {/* {image} */}
@@ -134,7 +152,7 @@ const Equipment = () => {
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={(e) => {
                 e.preventDefault();
-              
+                updateEquipment();
               }}
             >
               Update
@@ -174,7 +192,7 @@ const Equipment = () => {
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" 
                     onClick={(e) => {
                         e.preventDefault();
-                       
+                        editEquipment(equipment);
                     }}>
                       Edit
                     </span>
