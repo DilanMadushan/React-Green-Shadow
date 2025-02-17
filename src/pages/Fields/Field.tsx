@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ImagePicker from "../../Components/ImagePicker";
 import FieldModel from "../../Models/FieldModel";
+import Swal from "sweetalert2";
 
 const Field = () => {
   const [image1, setImage1] = useState("");
@@ -16,6 +17,24 @@ const Field = () => {
     const newField = new FieldModel(fieldCode, name, location, size);
     setFields([...fields, newField]);
   };
+
+  const deleteField = (code: string) => {
+     Swal.fire({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setFields(fields.filter((field)=>(field.fieldCode != code)))
+
+          }
+        });
+    
+  }
 
   return (
     <>
@@ -156,10 +175,16 @@ const Field = () => {
                       {field.size}
                     </th>
                     <td className="px-6 py-4 flex gap-4">
-                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                    >
                       Edit
                     </span>
-                    <span className="font-medium text-red-600 dark:text-red-500 hover:underline">
+                    <span className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
+                    onClick={(e)=>{
+                      e.preventDefault();
+                      deleteField(field.fieldCode)
+                    }}
+                    >
                       Delete
                     </span>
                   </td>
