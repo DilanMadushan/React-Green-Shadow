@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import ImagePicker from "../../Components/ImagePicker";
+import LogModel from '../../Models/LogModel';
 
 const Log = () => {
 
@@ -9,8 +10,15 @@ const Log = () => {
     const [field, setField] = useState("");
     const [crop, setCrop] = useState("");
     const [staff, setStaff] = useState("");
+
+    const [logs, setLogs] = useState<LogModel[]>([]);
+
+    const saveLog = () =>{
+      setLogs([...logs,new LogModel(logCode,image,date,field,crop,staff)])
+    }
   
   return (
+
     <>
     <div className="w-screen h-full p-10">
    
@@ -123,7 +131,7 @@ const Log = () => {
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={(e) => {
                 e.preventDefault();
-           
+                saveLog();
               }}
             >
               Save
@@ -154,7 +162,7 @@ const Log = () => {
                 <th scope="col" className="px-6 py-3">
                   Field
                 </th>
-                
+
                 <th scope="col" className="px-6 py-3">
                   Crop
                 </th>
@@ -167,25 +175,28 @@ const Log = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {fields.map((field,index)=>(
+              {logs.map((log,index)=>(
                     <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                    <th className="px-6 py-4">
-                      {field.fieldCode}
+                      {log.logCode}
                     </th>
                     <th className="px-6 py-4">
-                      {field.name}
+                      {log.date}
                     </th>
                     <th className="px-6 py-4">
-                      {field.location}
+                      {log.field}
                     </th>
                     <th className="px-6 py-4">
-                      {field.size}
+                      {log.crop}
+                    </th>
+                    <th className="px-6 py-4">
+                      {log.staff}
                     </th>
                     <td className="px-6 py-4 flex gap-4">
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
                     onClick={(e)=>{
                       e.preventDefault();
-                      editField(field)
+        
                     }}
                     >
                       Edit
@@ -193,14 +204,14 @@ const Log = () => {
                     <span className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
                     onClick={(e)=>{
                       e.preventDefault();
-                      deleteField(field.fieldCode)
+                
                     }}
                     >
                       Delete
                     </span>
                   </td>
                 </tr>
-                    ))} */}
+                    ))}
             </tbody>
           </table>
         </div>
