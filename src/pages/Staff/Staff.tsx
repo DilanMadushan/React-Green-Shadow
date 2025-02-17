@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import StaffModel from "../../Models/StaffModel";
+import Swal from "sweetalert2";
 
 const Staff = () => {
   const [staffId, setStaffId] = useState("");
@@ -17,6 +18,22 @@ const Staff = () => {
   const saveStaff = () =>{
     setStaffs([...staffs,new StaffModel(staffId,firstName,lastName,dob,gender,joinDate,address,mobile,email)]);
   }
+
+  const deleteCrop = (code: string) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setStaffs(staffs.filter((staff) => staff.staffId != code));
+        }
+      });
+    };
 
   return (
     <>
@@ -265,7 +282,7 @@ const Staff = () => {
                     <span className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
                     onClick={(e)=>{
                       e.preventDefault();
-         
+                      deleteCrop(staff.staffId)
                     }}
                     >
                       Delete
