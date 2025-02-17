@@ -1,4 +1,4 @@
-export default class Equipment {
+export default class EquipmentModel {
     equipmentId:string;
     name:string;
     type:string;

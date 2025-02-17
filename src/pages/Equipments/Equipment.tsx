@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import EquipmentModel from '../../Models/EquipmentModel'
 
 const Equipment = () => {
 
@@ -6,6 +7,13 @@ const Equipment = () => {
   const [name,setName] = useState("")
   const [type,setType] = useState("")
   const [status,setStatus] = useState("")
+
+  const [equipments,setEquipments] = useState<EquipmentModel[]>([]);
+
+  const SaveEquipment = () => {
+    const newEquipment = new EquipmentModel(equipmentId,name,type,status);
+    setEquipments([...equipments,newEquipment]);
+  }
 
   return (
     <>
@@ -99,7 +107,7 @@ const Equipment = () => {
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={(e) => {
                 e.preventDefault();
-               
+                SaveEquipment();
               }}
             >
               Save
@@ -139,13 +147,12 @@ const Equipment = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {vehicles.map((vehicle, index) => (
+              {equipments.map((equipment, index) => (
                 <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                  <th className="px-6 py-4">{vehicle.vehicleCode}</th>
-                  <th className="px-6 py-4">{vehicle.plateNumber}</th>
-                  <th className="px-6 py-4">{vehicle.categary}</th>
-                  <th className="px-6 py-4">{vehicle.fuelType}</th>
-                  <th className="px-6 py-4">{vehicle.status}</th>
+                  <th className="px-6 py-4">{equipment.equipmentId}</th>
+                  <th className="px-6 py-4">{equipment.name}</th>
+                  <th className="px-6 py-4">{equipment.type}</th>
+                  <th className="px-6 py-4">{equipment.status}</th>
                   <td className="px-6 py-4 flex gap-4">
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" 
                     onClick={(e) => {
@@ -165,7 +172,7 @@ const Equipment = () => {
                     </span>
                   </td>
                 </tr>
-              ))} */}
+              ))}
             </tbody>
           </table>
         </div>
