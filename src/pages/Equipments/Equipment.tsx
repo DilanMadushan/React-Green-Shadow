@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import EquipmentModel from '../../Models/EquipmentModel'
+import Swal from "sweetalert2";
 
 const Equipment = () => {
 
@@ -13,6 +14,22 @@ const Equipment = () => {
   const SaveEquipment = () => {
     const newEquipment = new EquipmentModel(equipmentId,name,type,status);
     setEquipments([...equipments,newEquipment]);
+  }
+
+  const deleteEquipment = (id:string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setEquipments(equipments.filter((equipment)=>(equipment.equipmentId != id)))
+      }
+    });
   }
 
   return (
@@ -165,7 +182,7 @@ const Equipment = () => {
                       className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
                       onClick={(e) => {
                        e.preventDefault();
-                      
+                       deleteEquipment(equipment.equipmentId);
                       }}
                     >
                       Delete
