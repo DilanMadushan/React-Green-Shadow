@@ -72,7 +72,7 @@ const Crop = () => {
   return (
     <>
       {/* {image} */}
-      <div className="w-full p-10">
+      <div className="w-full h-full p-10">
         <h1 className="text-[3rem] font-sans font-bold text-emerald-500  bg-emerald-100 rounded-2xl text-center mb-10">
           CROP MANAGE
         </h1>

@@ -14,7 +14,7 @@ const Field = () => {
   const [fields, setFields] = useState<FieldModel[]>([]);
 
   const SaveField = () => {
-    const newField = new FieldModel(fieldCode, name, location, size);
+    const newField = new FieldModel(image1,image2,fieldCode, name, location, size);
     setFields([...fields, newField]);
   };
 
@@ -36,6 +36,8 @@ const Field = () => {
   }
 
   const editField = (field:FieldModel) => {
+    setImage1(field.image1)
+    setImage2(field.image2)
     setFieldCode(field.fieldCode)
     setName(field.name)
     setLocation(field.location)
@@ -45,7 +47,7 @@ const Field = () => {
   const updateField = () => {
     const updatedFields = fields.map((field) => {
       if (field.fieldCode === fieldCode) {
-        return new FieldModel(fieldCode, name, location, size);
+        return new FieldModel(image1,image2,fieldCode, name, location, size);
       } else {
         return field;
       }
