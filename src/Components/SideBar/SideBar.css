@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+span{
+    @apply mx-5
+}
+
+
+.links:hover{
+        @apply bg-emerald-300 transition duration-200
+}
+
+ .links:active{
+    @apply bg-emerald-300
+ }
