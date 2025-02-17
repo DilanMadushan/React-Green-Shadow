@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import VehicleModel from '../../Models/VehicleModel';
 
 const Vehicle = () => {
 
@@ -7,6 +8,13 @@ const Vehicle = () => {
     const [category, setCategory] = useState("");
     const [fualType, setFualType] = useState("");
     const [status, setStatus] = useState("");
+
+    const [vehicles, setVehicles] = useState<VehicleModel[]>([]); 
+
+    const saveVehicle = () => {
+        const newVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status);
+        setVehicles([...vehicles, newVehicle]);
+    };
   
   return (
     <>
@@ -64,7 +72,7 @@ const Vehicle = () => {
                 onChange={(e) => setCategory(e.target.value)}
               >
                 <option value=""> Category</option>
-                <option value="SUMMER">TRCTER</option>
+                <option value="TRCTER">TRCTER</option>
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
@@ -83,8 +91,8 @@ const Vehicle = () => {
                 onChange={(e) => setFualType(e.target.value)}
               >
                 <option value="">Fual Type</option>
-                <option value="Rice">PETREL</option>
-                <option value="Rice">DESAL</option>
+                <option value="PETREL">PETREL</option>
+                <option value="DESAL">DESAL</option>
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
@@ -117,7 +125,7 @@ const Vehicle = () => {
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={(e) => {
                 e.preventDefault();
-             
+                saveVehicle();
               }}
             >
               Save
@@ -140,19 +148,19 @@ const Vehicle = () => {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  Crop Code
+                  Vehicle Code
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Common Name
+                License Plate Number
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Category
+                Category
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Session
+                Fual Type
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Field
+                Status
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Action
@@ -160,13 +168,13 @@ const Vehicle = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {crops.map((crop, index) => (
+              {vehicles.map((vehicle, index) => (
                 <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                  <th className="px-6 py-4">{crop.cropCode}</th>
-                  <th className="px-6 py-4">{crop.name}</th>
-                  <th className="px-6 py-4">{crop.category}</th>
-                  <th className="px-6 py-4">{crop.sesson}</th>
-                  <th className="px-6 py-4">{crop.field}</th>
+                  <th className="px-6 py-4">{vehicle.vehicleCode}</th>
+                  <th className="px-6 py-4">{vehicle.plateNumber}</th>
+                  <th className="px-6 py-4">{vehicle.categary}</th>
+                  <th className="px-6 py-4">{vehicle.fuelType}</th>
+                  <th className="px-6 py-4">{vehicle.status}</th>
                   <td className="px-6 py-4 flex gap-4">
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" onClick={() => {updateCrop(crop.cropCode)}}>
                       Edit
@@ -174,14 +182,14 @@ const Vehicle = () => {
                     <span
                       className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
                       onClick={() => {
-                        deleteCrop(crop.cropCode);
+                       
                       }}
                     >
                       Delete
                     </span>
                   </td>
                 </tr>
-              ))} */}
+              ))}
             </tbody>
           </table>
         </div>
