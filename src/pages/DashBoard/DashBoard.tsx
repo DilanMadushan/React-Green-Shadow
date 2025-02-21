@@ -2,7 +2,7 @@ import React from 'react'
 
 const DashBoard = () => {
   return (
-    <div>DashBoard</div>
+    <div className='w-full h-screen'>DashBoard</div>
   )
 }
 

@@ -9,11 +9,12 @@ const Vehicle = () => {
     const [category, setCategory] = useState("");
     const [fualType, setFualType] = useState("");
     const [status, setStatus] = useState("");
+    const [staff,setStaff] = useState("")
 
     const [vehicles, setVehicles] = useState<VehicleModel[]>([]); 
 
     const saveVehicle = () => {
-        const newVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status);
+        const newVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status,staff);
         setVehicles([...vehicles, newVehicle]);
     };
 
@@ -44,7 +45,7 @@ const Vehicle = () => {
     const updateVehicle = () => {
         const updatedVehicles = vehicles.map((vehicle) => {
             if (vehicle.vehicleCode === vehicleCode) {
-                return new VehicleModel(vehicleCode,plateNumber,category,fualType,status);
+                return new VehicleModel(vehicleCode,plateNumber,category,fualType,status,staff);
             } else {
                 return vehicle;
             }
@@ -154,6 +155,27 @@ const Vehicle = () => {
                 Please fill out this field.
               </p>
             </div>
+
+            <div className="w-full flex flex-col mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1 ">
+              Stff
+              </label>
+              <select
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
+                name="integration[city_id]"
+                id="integration_city_id"
+                value={staff}
+                onChange={(e) => setStaff(e.target.value)}
+              >
+                <option value=""> Stff</option>
+                <option value="ST001">ST001</option>
+                <option value="ST002">ST002</option>
+              </select>
+              <p className="text-sm text-red-500 hidden mt-3" id="error">
+                Please fill out this field.
+              </p>
+            </div>
+
           </div>
           <div className="flex gap-5">
             <button
@@ -199,6 +221,9 @@ const Vehicle = () => {
                 Status
                 </th>
                 <th scope="col" className="px-6 py-3">
+                Staff
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Action
                 </th>
               </tr>
@@ -211,6 +236,7 @@ const Vehicle = () => {
                   <th className="px-6 py-4">{vehicle.categary}</th>
                   <th className="px-6 py-4">{vehicle.fuelType}</th>
                   <th className="px-6 py-4">{vehicle.status}</th>
+                  <th className="px-6 py-4">{vehicle.staff}</th>
                   <td className="px-6 py-4 flex gap-4">
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" 
                     onClick={(e) => {

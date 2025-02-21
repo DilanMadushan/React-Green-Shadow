@@ -8,11 +8,12 @@ const Equipment = () => {
   const [name,setName] = useState("")
   const [type,setType] = useState("")
   const [status,setStatus] = useState("")
+  const [staff,setStaff] = useState("")
 
   const [equipments,setEquipments] = useState<EquipmentModel[]>([]);
 
   const SaveEquipment = () => {
-    const newEquipment = new EquipmentModel(equipmentId,name,type,status);
+    const newEquipment = new EquipmentModel(equipmentId,name,type,status,staff);
     setEquipments([...equipments,newEquipment]);
   }
 
@@ -42,7 +43,7 @@ const Equipment = () => {
   const updateEquipment = () => {
     const updatedEquipments = equipments.map((equipment) => {
       if (equipment.equipmentId === equipmentId) {
-        return new EquipmentModel(equipmentId,name,type,status);
+        return new EquipmentModel(equipmentId,name,type,status,staff);
       } else {
         return equipment;
       }
@@ -135,7 +136,29 @@ const Equipment = () => {
                 Please fill out this field.
               </p>
             </div>
+
+            <div className="w-full flex flex-col mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1 ">
+              Stff
+              </label>
+              <select
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
+                name="integration[city_id]"
+                id="integration_city_id"
+                value={staff}
+                onChange={(e) => setStaff(e.target.value)}
+              >
+                <option value=""> Stff</option>
+                <option value="ST001">ST001</option>
+                <option value="ST002">ST002</option>
+              </select>
+              <p className="text-sm text-red-500 hidden mt-3" id="error">
+                Please fill out this field.
+              </p>
+            </div>
+
           </div>
+
           <div className="flex gap-5">
             <button
               type="submit"
@@ -177,6 +200,9 @@ const Equipment = () => {
                 Status
                 </th>
                 <th scope="col" className="px-6 py-3">
+                Staff
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Action
                 </th>
               </tr>
@@ -188,6 +214,7 @@ const Equipment = () => {
                   <th className="px-6 py-4">{equipment.name}</th>
                   <th className="px-6 py-4">{equipment.type}</th>
                   <th className="px-6 py-4">{equipment.status}</th>
+                  <th className="px-6 py-4">{equipment.staff}</th>
                   <td className="px-6 py-4 flex gap-4">
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" 
                     onClick={(e) => {
