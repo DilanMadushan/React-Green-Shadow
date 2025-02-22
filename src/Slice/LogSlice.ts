@@ -37,7 +37,7 @@ export const updateLogState = createAsyncThunk(
     'log/updateLogState',
     async(log:LogModel)=>{
         try{
-            const response = await api.put('log/update',log);
+            const response = await api.patch('log/update',log);
             return response.data;
         }catch(e){
             console.log(e);

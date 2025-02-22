@@ -4,7 +4,7 @@ import LogModel from '../../Models/LogModel';
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/Store';
-import { deleteLogState, fetchLogState, saveLogState } from '../../Slice/LogSlice';
+import { deleteLogState, fetchLogState, saveLogState, updateLogState } from '../../Slice/LogSlice';
 
 const Log = () => {
 
@@ -58,14 +58,8 @@ const Log = () => {
     }
 
     const updateLog = ()=>{
-      const updatedLogs = logs.map((log)=>{
-        if(log.logCode === logCode){
-          return new LogModel(logCode,image,date,field,crop,staff);
-        }else{
-          return log;
-        }
-      })
-      setLogs(updatedLogs)
+      const updatedLogs =  new LogModel(logCode,image,date,field,crop,staff);
+      dispatch(updateLogState(updatedLogs));
     }
   
   return (
