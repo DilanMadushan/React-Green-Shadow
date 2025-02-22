@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit"
 import CropReducer from "../Slice/CropSlice"
 import FieldReducer from "../Slice/FieldSlice"
+import LogReducer from "../Slice/LogSlice"
 
 export const store = configureStore({
   reducer: {
     crop : CropReducer,
-    field : FieldReducer
+    field : FieldReducer,
+    log:LogReducer
   },
 })
 
