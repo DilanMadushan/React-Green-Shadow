@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import ImagePicker from "../../Components/ImagePicker";
 import LogModel from '../../Models/LogModel';
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../store/Store';
+import { fetchLogState } from '../../Slice/LogSlice';
 
 const Log = () => {
 
@@ -12,7 +15,17 @@ const Log = () => {
     const [crop, setCrop] = useState("");
     const [staff, setStaff] = useState("");
 
-    const [logs, setLogs] = useState<LogModel[]>([]);
+    // const [logs, setLogs] = useState<LogModel[]>([]);
+    const logs = useSelector((state)=>state.log);
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(()=>{
+      if(logs.length === 0){
+        dispatch(fetchLogState());
+      }
+    },[dispatch,logs.length])
+
 
     const saveLog = () =>{
       setLogs([...logs,new LogModel(logCode,image,date,field,crop,staff)])
@@ -212,7 +225,7 @@ const Log = () => {
               </tr>
             </thead>
             <tbody>
-              {logs.map((log,index)=>(
+              {logs.map((log:LogModel,index)=>(
                     <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                    <th className="px-6 py-4">
                       {log.logCode}
