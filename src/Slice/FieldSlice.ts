@@ -24,7 +24,7 @@ export const fetchFieldState = createAsyncThunk(
     'field/fetchFieldState',
     async()=>{
         try{
-            const response = await api.get('field/getall');
+            const response = await api.get('field/getall');   
             return response.data;
         }catch(e){
             console.log(e);

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import ImagePicker from "../../Components/ImagePicker";
 import FieldModel from "../../Models/FieldModel";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
-import { saveFieldState } from "../../Slice/FieldSlice";
+import { fetchFieldState, saveFieldState } from "../../Slice/FieldSlice";
 
 const Field = () => {
   const [image1, setImage1] = useState("");
@@ -19,6 +19,12 @@ const Field = () => {
   const fields = useSelector((state)=>state.field);
 
   const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(()=>{
+        if(fields.length === 0){
+          dispatch(fetchFieldState());
+        }
+    },[dispatch,fields.length])
 
   const SaveField = () => {
     const newField = new FieldModel(image1,image2,fieldCode, name, location, size);
@@ -36,7 +42,7 @@ const Field = () => {
           confirmButtonText: "Yes, delete it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            setFields(fields.filter((field)=>(field.fieldCode != code)))
+            // setFields(fields.filter((field)=>(field.fieldCode != code)))
 
           }
         });
@@ -59,7 +65,7 @@ const Field = () => {
         return field;
       }
     });
-    setFields(updatedFields);
+    // setFields(updatedFields);
   }
 
   return (
@@ -187,7 +193,7 @@ const Field = () => {
               </tr>
             </thead>
             <tbody>
-              {fields.map((field,index)=>(
+              {fields.map((field:FieldModel,index)=>(
                     <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                    <th className="px-6 py-4">
                       {field.fieldCode}
