@@ -4,7 +4,7 @@ import FieldModel from "../../Models/FieldModel";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
-import { deleteFieldState, fetchFieldState, saveFieldState } from "../../Slice/FieldSlice";
+import { deleteFieldState, fetchFieldState, saveFieldState, updateFieldState } from "../../Slice/FieldSlice";
 
 const Field = () => {
   const [image1, setImage1] = useState("");
@@ -57,14 +57,8 @@ const Field = () => {
   }
 
   const updateField = () => {
-    const updatedFields = fields.map((field) => {
-      if (field.fieldCode === fieldCode) {
-        return new FieldModel(image1,image2,fieldCode, name, location, size);
-      } else {
-        return field;
-      }
-    });
-    // setFields(updatedFields);
+    const updateField = new FieldModel(image1,image2,fieldCode, name, location, size);
+    dispatch(updateFieldState(updateField))
   }
 
   return (
