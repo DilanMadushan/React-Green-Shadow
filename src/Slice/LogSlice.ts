@@ -45,6 +45,15 @@ export const updateLogState = createAsyncThunk(
     }
 )
 
+async function deleteLogState(logCode:string){
+    try{
+        const response = await api.delete('log/delete/'+logCode);
+        return response.data;
+    }catch(e){
+        console.log(e);
+    }
+}
+
 
 
 const logSlice = createSlice({
@@ -88,6 +97,16 @@ const logSlice = createSlice({
             console.log(action.error.message);
         })
         .addCase(updateLogState.pending,(state,action)=>{
+            console.log("pending");
+        })
+        builder
+        .addCase(deleteLogState.fulfilled,(state,action)=>{
+            return state = state.filter((log:LogModel)=>log.logCode!==action.payload.logCode);
+        })
+        .addCase(deleteLogState.rejected,(state,action)=>{
+            console.log(action.error.message);
+        })
+        .addCase(deleteLogState.pending,(state,action)=>{
             console.log("pending");
         })
     }
