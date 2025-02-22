@@ -33,6 +33,18 @@ export const fetchLogState = createAsyncThunk(
     }
 )
 
+export const updateLogState = createAsyncThunk(
+    'log/updateLogState',
+    async(log:LogModel)=>{
+        try{
+            const response = await api.put('log/update',log);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 
 
 const logSlice = createSlice({
@@ -60,6 +72,22 @@ const logSlice = createSlice({
             console.log(action.error.message);
         })
         .addCase(fetchLogState.pending,(state,action)=>{
+            console.log("pending");
+        })
+        builder
+        .addCase(updateLogState.fulfilled,(state,action)=>{
+            return state = state.map((log:LogModel)=>{
+                if(log.logCode===action.payload.logCode){
+                    return new LogModel(action.payload.logCode,action.payload.image,action.payload.date,action.payload.field,action.payload.crop,action.payload.staff);
+                }else{
+                    return log;
+                }
+            })
+        })
+        .addCase(updateLogState.rejected,(state,action)=>{
+            console.log(action.error.message);
+        })
+        .addCase(updateLogState.pending,(state,action)=>{
             console.log("pending");
         })
     }
