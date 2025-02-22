@@ -4,7 +4,7 @@ import LogModel from '../../Models/LogModel';
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/Store';
-import { fetchLogState } from '../../Slice/LogSlice';
+import { fetchLogState, saveLogState } from '../../Slice/LogSlice';
 
 const Log = () => {
 
@@ -28,7 +28,8 @@ const Log = () => {
 
 
     const saveLog = () =>{
-      setLogs([...logs,new LogModel(logCode,image,date,field,crop,staff)])
+      const newLog = new LogModel(logCode,image,date,field,crop,staff);
+      dispatch(saveLogState(newLog));
     }
 
     const deleteLog = (code:string) =>{
@@ -166,7 +167,7 @@ const Log = () => {
                 onChange={(e) => setStaff(e.target.value)}
               >
                 <option value=""> Staff</option>
-                <option value="ST002">ST001</option>
+                <option value="ST001">ST001</option>
                 <option value="ST002">ST002</option>
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
