@@ -31,6 +31,18 @@ export const fetchFieldState = createAsyncThunk(
         }
     })
 
+export const updateFieldState = createAsyncThunk(
+    'field/updateFieldState',
+    async(field:FieldModel)=>{
+        try{
+            const response = await api.patch('field/update',field);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 export const cropSlice = createSlice({
     name:"crop",
     initialState,
@@ -45,7 +57,7 @@ export const cropSlice = createSlice({
 
         })
         .addCase(saveFieldState.pending,(state,action)=>{
-            console.log(action.payload);
+            console.log("pending");
         })
         builder
         .addCase(fetchFieldState.fulfilled,(state,action)=>{
@@ -57,8 +69,23 @@ export const cropSlice = createSlice({
             console.log(action.payload);
         })
         .addCase(fetchFieldState.pending,(state,action)=>{
-            console.log(action.payload
-            );
+            console.log("pending");
+        })
+        builder
+        .addCase(updateFieldState.fulfilled,(state,action)=>{
+            return state = state.map((field:FieldModel)=>{
+                if(field.fieldCode===action.payload.fieldCode){
+                    return new FieldModel(action.payload.image1,action.payload.image2,action.payload.fieldCode,action.payload.name,action.payload.location,action.payload.size);
+                }else{
+                    return field
+                }
+            })
+        })
+        .addCase(updateFieldState.rejected,(state,action)=>{
+            console.log(action.payload);
+        })
+        .addCase(updateFieldState.pending,(state,action)=>{
+            console.log("pending");
         })
     }
 })
