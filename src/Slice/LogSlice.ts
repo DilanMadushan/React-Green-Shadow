@@ -21,6 +21,18 @@ export const saveLogState = createAsyncThunk(
     }
 )
 
+export const fetchLogState = createAsyncThunk(
+    'log/fetchLogState',
+    async()=>{
+        try{
+            const response = await api.get('log/getall');
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 
 
 const logSlice = createSlice({
@@ -36,6 +48,18 @@ const logSlice = createSlice({
             console.log(action.error.message);
         })
         .addCase(saveLogState.pending,(state,action)=>{
+            console.log("pending");
+        })
+        builder
+        .addCase(fetchLogState.fulfilled,(state,action)=>{
+            action.payload.map((log:LogModel)=>{
+                state.push(log);
+            })
+        })
+        .addCase(fetchLogState.rejected,(state,action)=>{
+            console.log(action.error.message);
+        })
+        .addCase(fetchLogState.pending,(state,action)=>{
             console.log("pending");
         })
     }
