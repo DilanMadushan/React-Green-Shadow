@@ -3,7 +3,7 @@ import base64 from "base64-encode-file";
 import ImagePicker from "../../Components/ImagePicker";
 import CropModel from "../../Models/CropModel";
 import Swal from "sweetalert2";
-import { fetchCropState, saveCropState, updateCropState } from "../../Slice/CropSlice";
+import { deleteCropState, fetchCropState, saveCropState, updateCropState } from "../../Slice/CropSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
 
@@ -53,7 +53,7 @@ const Crop = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        setCrops(crops.filter((crop) => crop.cropCode != code));
+        dispatch(deleteCropState(code));
       }
     });
   };
