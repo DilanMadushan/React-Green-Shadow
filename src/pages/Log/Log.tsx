@@ -4,7 +4,7 @@ import LogModel from '../../Models/LogModel';
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/Store';
-import { fetchLogState, saveLogState } from '../../Slice/LogSlice';
+import { deleteLogState, fetchLogState, saveLogState } from '../../Slice/LogSlice';
 
 const Log = () => {
 
@@ -43,7 +43,7 @@ const Log = () => {
             confirmButtonText: "Yes, delete it!",
           }).then((result) => {
             if (result.isConfirmed) {
-              setLogs(logs.filter((log)=>(log.logCode != code)))
+              dispatch(deleteLogState(code))
             }
           });
     }

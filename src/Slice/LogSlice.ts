@@ -45,14 +45,17 @@ export const updateLogState = createAsyncThunk(
     }
 )
 
-async function deleteLogState(logCode:string){
-    try{
-        const response = await api.delete('log/delete/'+logCode);
-        return response.data;
-    }catch(e){
-        console.log(e);
+export const deleteLogState = createAsyncThunk(
+    'log/deleteLogState',
+    async(code:string)=>{
+        try{
+            const response = await api.delete(`log/delete/${code}`);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
     }
-}
+)
 
 
 
