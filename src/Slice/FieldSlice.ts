@@ -47,6 +47,18 @@ export const cropSlice = createSlice({
         .addCase(saveFieldState.pending,(state,action)=>{
             console.log(action.payload);
         })
-
+        builder
+        .addCase(fetchFieldState.fulfilled,(state,action)=>{
+            action.payload.map((field:FieldModel)=>{
+                state.push(field);
+            });
+        })
+        .addCase(fetchFieldState.rejected,(state,action)=>{
+            console.log(action.payload);
+        })
+        .addCase(fetchFieldState.pending,(state,action)=>{
+            console.log(action.payload
+            );
+        })
     }
 })
