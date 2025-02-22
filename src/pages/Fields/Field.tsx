@@ -4,7 +4,7 @@ import FieldModel from "../../Models/FieldModel";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
-import { fetchFieldState, saveFieldState } from "../../Slice/FieldSlice";
+import { deleteFieldState, fetchFieldState, saveFieldState } from "../../Slice/FieldSlice";
 
 const Field = () => {
   const [image1, setImage1] = useState("");
@@ -42,8 +42,7 @@ const Field = () => {
           confirmButtonText: "Yes, delete it!",
         }).then((result) => {
           if (result.isConfirmed) {
-            // setFields(fields.filter((field)=>(field.fieldCode != code)))
-
+            dispatch(deleteFieldState(code));
           }
         });
   }

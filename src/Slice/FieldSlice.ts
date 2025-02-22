@@ -100,7 +100,7 @@ const fieldSlice = createSlice({
         })
         builder
         .addCase(deleteFieldState.fulfilled,(state,action)=>{         
-            return state = state.filter((field:FieldModel)=>field.fieldCode!==action.payload);
+            return state = state.filter((field:FieldModel)=>field.fieldCode!==action.payload.fieldCode);
         })
         .addCase(deleteFieldState.rejected,(state,action)=>{
             console.log(action.payload);
