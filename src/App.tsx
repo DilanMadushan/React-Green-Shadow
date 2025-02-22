@@ -8,6 +8,8 @@ import Equipment from "./pages/Equipments/Equipment";
 import Log from "./pages/Log/Log";
 import Staff from "./pages/Staff/Staff";
 import Vehicle from "./pages/Vehicle/Vehicle";
+import {Provider} from "react-redux";
+import {store} from "./store/Store.ts";
 
 const routes = createBrowserRouter([
   {
@@ -28,7 +30,9 @@ const routes = createBrowserRouter([
 function App() {
   return (
     <>
+    <Provider store={store}>
       <RouterProvider router={routes} />
+    </Provider>
     </>
   );
 }

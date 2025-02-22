@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import base64 from "base64-encode-file";
 import ImagePicker from "../../Components/ImagePicker";
 import CropModel from "../../Models/CropModel";
 import Swal from "sweetalert2";
+import { fetchCropState, saveCropState, updateCropState } from "../../Slice/CropSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store/Store";
 
 const Crop = () => {
   const [image, setImage] = useState("https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg");
@@ -13,7 +16,18 @@ const Crop = () => {
   const [category, setCategory] = useState("");
   const [field, setField] = useState("");
 
-  const [crops, setCrops] = useState<CropModel[]>([]);
+  // const [crops, setCrops] = useState<CropModel[]>([]);
+
+  const crops = useSelector((state)=>state.crop);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(()=>{
+      if(crops.length === 0){
+        dispatch(fetchCropState());
+      }
+  },[dispatch,crops.length])
+
 
   const saveCrop = () => {
     const newCrop = new CropModel(
@@ -25,7 +39,7 @@ const Crop = () => {
       category,
       field
     );
-    setCrops([...crops, newCrop]);
+    dispatch(saveCropState(newCrop));
   };
 
   const deleteCrop = (code: string) => {
@@ -59,14 +73,8 @@ const Crop = () => {
   }
 
   const updateCrops = () => {
-    const updatedCrops = crops.map((crop)=>{
-      if(crop.cropCode === cropCode){
-       return new CropModel(image,cropCode,name,scientificName,sesson,category,field);
-      }else{
-        return crop;
-      }
-    })
-    setCrops(updatedCrops)
+    const updateCrop = new CropModel(image,cropCode,name,scientificName,sesson,category,field);
+    dispatch(updateCropState(updateCrop));
   }
 
   return (
@@ -181,8 +189,8 @@ const Crop = () => {
                 onChange={(e) => setField(e.target.value)}
               >
                 <option value=""> Field</option>
-                <option value="SUMMER">F001</option>
-                <option value="WINTER">F002</option>
+                <option value="F001">F001</option>
+                <option value="F002">F002</option>
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
@@ -238,7 +246,7 @@ const Crop = () => {
               </tr>
             </thead>
             <tbody>
-              {crops.map((crop, index) => (
+              {crops.map((crop:CropModel, index) => (
                 <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                   <th className="px-6 py-4">{crop.cropCode}</th>
                   <th className="px-6 py-4">{crop.name}</th>
