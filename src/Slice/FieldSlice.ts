@@ -43,7 +43,18 @@ export const updateFieldState = createAsyncThunk(
     }
 )
 
-export const cropSlice = createSlice({
+export const deleteFieldState = createAsyncThunk(
+    'field/deleteFieldState',
+    async(code:string)=>{
+        try{
+            const response = await api.delete(`field/delete/${code}`);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    })
+
+const fieldSlice = createSlice({
     name:"crop",
     initialState,
     reducers:{},
@@ -87,5 +98,17 @@ export const cropSlice = createSlice({
         .addCase(updateFieldState.pending,(state,action)=>{
             console.log("pending");
         })
+        builder
+        .addCase(deleteFieldState.fulfilled,(state,action)=>{         
+            return state = state.filter((field:FieldModel)=>field.fieldCode!==action.payload);
+        })
+        .addCase(deleteFieldState.rejected,(state,action)=>{
+            console.log(action.payload);
+        })
+        .addCase(deleteFieldState.pending,(state,action)=>{
+            console.log("pending");
+        })
     }
 })
+
+export default fieldSlice.reducer;
