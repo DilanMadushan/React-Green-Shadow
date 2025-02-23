@@ -21,6 +21,18 @@ const api = axios.create({
     }
 )
 
+export const updateVehicleState = createAsyncThunk(
+    'vehicle/updateVehicleState',
+    async(vehicle:VehicleModel)=>{
+        try{
+            const response = await api.put('vehicle/update',vehicle);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 export const fetchVehicleState = createAsyncThunk(
     'vehicle/fetchVehicleState',
     async()=>{
@@ -58,6 +70,21 @@ const vehicleSlice = createSlice({
             console.log(action.payload);
         })
         .addCase(fetchVehicleState.pending,(state,action)=>{
+            console.log("pending");
+        })
+        .addCase(updateVehicleState.fulfilled,(state,action)=>{
+            return state.map((vehicle:VehicleModel)=>{
+                if(vehicle.vehicleCode===action.payload.vehicleCode){
+                    return action.payload;
+                }else{
+                    return vehicle;
+                }
+            })
+        })
+        .addCase(updateVehicleState.rejected,(state,action)=>{
+            console.log(action.payload);
+        })
+        .addCase(updateVehicleState.pending,(state,action)=>{
             console.log("pending");
         })
     }
