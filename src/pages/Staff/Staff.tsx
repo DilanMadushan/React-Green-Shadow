@@ -3,7 +3,7 @@ import StaffModel from "../../Models/StaffModel";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
-import { deleteStaffState, fetchStaffState, saveStaffState } from "../../Slice/StaffSlice";
+import { deleteStaffState, fetchStaffState, saveStaffState, updateStaffState } from "../../Slice/StaffSlice";
 
 const Staff = () => {
   const [staffId, setStaffId] = useState("");
@@ -62,15 +62,8 @@ const Staff = () => {
     }
 
     const updateStaff = () => {
-    const updatedStaffs = staffs.map((staff)=>{
-      if(staff.staffId === staffId){
-        return new StaffModel(staffId,firstName,lastName,dob,gender,joinDate,address,mobile,email);
-      }else{
-        return staff;
-      }
-    })
-
-    // setStaffs(updatedStaffs);
+        const updatedStaff = new StaffModel(staffId,firstName,lastName,dob,gender,joinDate,address,mobile,email)
+        dispatch(updateStaffState(updatedStaff));
       }
 
   return (

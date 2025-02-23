@@ -98,7 +98,7 @@ const staffSlice = createSlice({
         .addCase(updateStaffState.fulfilled,(state,action)=>{
             return state = state.map((staff:StaffModel)=>{
                 if(staff.staffId===action.payload.staffId){
-                    return new StaffModel(staff.staffId,staff.firstName,staff.lastName,staff.dob,staff.gender,staff.joinDate,staff.address,staff.mobile,staff.email);
+                    return action.payload;
                 }else{
                     return staff;
                 }
