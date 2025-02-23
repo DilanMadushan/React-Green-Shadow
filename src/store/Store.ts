@@ -3,13 +3,15 @@ import CropReducer from "../Slice/CropSlice"
 import FieldReducer from "../Slice/FieldSlice"
 import LogReducer from "../Slice/LogSlice"
 import staffReducer from "../Slice/StaffSlice"
+import EquipmentReducer from "../Slice/EquipmentSlice"
 
 export const store = configureStore({
   reducer: {
     crop : CropReducer,
     field : FieldReducer,
     log:LogReducer,
-    staff:staffReducer
+    staff:staffReducer,
+    equipment:EquipmentReducer
   },
 })
 

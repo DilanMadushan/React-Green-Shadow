@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import EquipmentModel from '../../Models/EquipmentModel'
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../store/Store';
+import { fetchEquipmentState, saveEquipmentState } from '../../Slice/EquipmentSlice';
 
 const Equipment = () => {
 
@@ -10,11 +13,21 @@ const Equipment = () => {
   const [status,setStatus] = useState("")
   const [staff,setStaff] = useState("")
 
-  const [equipments,setEquipments] = useState<EquipmentModel[]>([]);
+  // const [equipments,setEquipments] = useState<EquipmentModel[]>([]);
+
+  const equipments = useSelector((state) => state.equipment);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (equipments.length === 0) {
+      dispatch(fetchEquipmentState());    
+    }
+  }, [dispatch, equipments.length]);
 
   const SaveEquipment = () => {
     const newEquipment = new EquipmentModel(equipmentId,name,type,status,staff);
-    setEquipments([...equipments,newEquipment]);
+    dispatch(saveEquipmentState(newEquipment));
   }
 
   const deleteEquipment = (id:string) => {
@@ -28,7 +41,7 @@ const Equipment = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        setEquipments(equipments.filter((equipment)=>(equipment.equipmentId != id)))
+        // setEquipments(equipments.filter((equipment)=>(equipment.equipmentId != id)))
       }
     });
   }
@@ -48,7 +61,7 @@ const Equipment = () => {
         return equipment;
       }
     });
-    setEquipments(updatedEquipments);
+    // setEquipments(updatedEquipments);
   }
 
   return (
@@ -208,7 +221,7 @@ const Equipment = () => {
               </tr>
             </thead>
             <tbody>
-              {equipments.map((equipment, index) => (
+              {equipments.map((equipment:EquipmentModel, index) => (
                 <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                   <th className="px-6 py-4">{equipment.equipmentId}</th>
                   <th className="px-6 py-4">{equipment.name}</th>
