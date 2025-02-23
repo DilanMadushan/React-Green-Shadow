@@ -3,7 +3,7 @@ import VehicleModel from '../../Models/VehicleModel';
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/Store';
-import { fetchVehicleState, saveVehicleState } from '../../Slice/VehicleSlice';
+import { deleteVehicleState, fetchVehicleState, saveVehicleState, updateVehicleState } from '../../Slice/VehicleSlice';
 
 const Vehicle = () => {
 
@@ -42,7 +42,7 @@ const Vehicle = () => {
             confirmButtonText: "Yes, delete it!",
           }).then((result) => {
             if (result.isConfirmed) {
-              // setVehicles(vehicles.filter((vehicle)=>(vehicle.vehicleCode != code)))
+             dispatch(deleteVehicleState(code));
             }
           });
     }
@@ -57,14 +57,7 @@ const Vehicle = () => {
     }
 
     const updateVehicle = () => {
-        const updatedVehicles = vehicles.map((vehicle) => {
-            if (vehicle.vehicleCode === vehicleCode) {
-                return new VehicleModel(vehicleCode,plateNumber,category,fualType,status,staff);
-            } else {
-                return vehicle;
-            }
-        });
-        // setVehicles(updatedVehicles); 
+        
     }
   
   return (
