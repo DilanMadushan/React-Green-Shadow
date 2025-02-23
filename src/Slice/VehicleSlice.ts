@@ -21,6 +21,18 @@ const api = axios.create({
     }
 )
 
+export const fetchVehicleState = createAsyncThunk(
+    'vehicle/fetchVehicleState',
+    async()=>{
+        try{
+            const response = await api.get('vehicle/getall');
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 
 const vehicleSlice = createSlice({
     name:"vehicle",
@@ -34,6 +46,18 @@ const vehicleSlice = createSlice({
             console.log(action.payload);
         })
         .addCase(saveVehicleState.pending,(state,action)=>{
+            console.log("pending");
+        })
+        builder
+        .addCase(fetchVehicleState.fulfilled,(state,action)=>{
+            action.payload.map((vehicle:VehicleModel)=>{
+                state.push(vehicle);
+            })
+        })
+        .addCase(fetchVehicleState.rejected,(state,action)=>{
+            console.log(action.payload);
+        })
+        .addCase(fetchVehicleState.pending,(state,action)=>{
             console.log("pending");
         })
     }
