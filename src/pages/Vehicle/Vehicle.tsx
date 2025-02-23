@@ -57,7 +57,8 @@ const Vehicle = () => {
     }
 
     const updateVehicle = () => {
-        
+        const updateVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status,staff);
+        dispatch(updateVehicleState(updateVehicle))
     }
   
   return (
