@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import StaffModel from "../../Models/StaffModel";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
-import { saveStaffState } from "../../Slice/StaffSlice";
+import { fetchStaffState, saveStaffState } from "../../Slice/StaffSlice";
 
 const Staff = () => {
   const [staffId, setStaffId] = useState("");
@@ -18,9 +18,15 @@ const Staff = () => {
 
   // const [staffs, setStaffs] = useState<StaffModel[]>([]);
 
-  const staffs = useSelector((state) => state.staffs);
+  const staffs = useSelector((state) => state.staff);
 
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (staffs.length === 0) {
+      dispatch(fetchStaffState());
+    }
+  }, [dispatch, staffs.length]);
 
   const saveStaff = () =>{
     const newStaff = new StaffModel(staffId,firstName,lastName,dob,gender,joinDate,address,mobile,email);
@@ -283,7 +289,7 @@ const Staff = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {staffs.map((staff:StaffModel,index)=>(
+              {staffs.map((staff:StaffModel,index)=>(
                     <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                    <th className="px-6 py-4">
                       {staff.staffId}
@@ -322,7 +328,7 @@ const Staff = () => {
                     </span>
                   </td>
                 </tr>
-                    ))} */}
+                    ))}
             </tbody>
           </table>
         </div>
