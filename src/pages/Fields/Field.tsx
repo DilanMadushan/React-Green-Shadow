@@ -4,7 +4,12 @@ import FieldModel from "../../Models/FieldModel";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
-import { deleteFieldState, fetchFieldState, saveFieldState, updateFieldState } from "../../Slice/FieldSlice";
+import {
+  deleteFieldState,
+  fetchFieldState,
+  saveFieldState,
+  updateFieldState,
+} from "../../Slice/FieldSlice";
 
 const Field = () => {
   const [image1, setImage1] = useState("");
@@ -16,50 +21,64 @@ const Field = () => {
 
   // const [fields, setFields] = useState<FieldModel[]>([]);
 
-  const fields = useSelector((state)=>state.field);
+  const fields = useSelector((state) => state.field);
 
   const dispatch = useDispatch<AppDispatch>();
 
-    useEffect(()=>{
-        if(fields.length === 0){
-          dispatch(fetchFieldState());
-        }
-    },[dispatch,fields.length])
+  useEffect(() => {
+    if (fields.length === 0) {
+      dispatch(fetchFieldState());
+    }
+  }, [dispatch, fields.length]);
 
   const SaveField = () => {
-    const newField = new FieldModel(image1,image2,fieldCode, name, location, size);
+    const newField = new FieldModel(
+      image1,
+      image2,
+      fieldCode,
+      name,
+      location,
+      size
+    );
     dispatch(saveFieldState(newField));
   };
 
   const deleteField = (code: string) => {
-     Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, delete it!",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatch(deleteFieldState(code));
-          }
-        });
-  }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteFieldState(code));
+      }
+    });
+  };
 
-  const editField = (field:FieldModel) => {
-    setImage1(field.image1)
-    setImage2(field.image2)
-    setFieldCode(field.fieldCode)
-    setName(field.name)
-    setLocation(field.location)
-    setSize(field.size)
-  }
+  const editField = (field: FieldModel) => {
+    setImage1(field.image1);
+    setImage2(field.image2);
+    setFieldCode(field.fieldCode);
+    setName(field.name);
+    setLocation(field.location);
+    setSize(field.size);
+  };
 
   const updateField = () => {
-    const updateField = new FieldModel(image1,image2,fieldCode, name, location, size);
-    dispatch(updateFieldState(updateField))
-  }
+    const updateField = new FieldModel(
+      image1,
+      image2,
+      fieldCode,
+      name,
+      location,
+      size
+    );
+    dispatch(updateFieldState(updateField));
+  };
 
   return (
     <>
@@ -186,40 +205,34 @@ const Field = () => {
               </tr>
             </thead>
             <tbody>
-              {fields.map((field:FieldModel,index)=>(
-                    <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                   <th className="px-6 py-4">
-                      {field.fieldCode}
-                    </th>
-                    <th className="px-6 py-4">
-                      {field.name}
-                    </th>
-                    <th className="px-6 py-4">
-                      {field.location}
-                    </th>
-                    <th className="px-6 py-4">
-                      {field.size}
-                    </th>
-                    <td className="px-6 py-4 flex gap-4">
-                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-                    onClick={(e)=>{
-                      e.preventDefault();
-                      editField(field)
-                    }}
+              {fields.map((field: FieldModel, index) => (
+                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                  <th className="px-6 py-4">{field.fieldCode}</th>
+                  <th className="px-6 py-4">{field.name}</th>
+                  <th className="px-6 py-4">{field.location}</th>
+                  <th className="px-6 py-4">{field.size}</th>
+                  <td className="px-6 py-4 flex gap-4">
+                    <span
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        editField(field);
+                      }}
                     >
                       Edit
                     </span>
-                    <span className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
-                    onClick={(e)=>{
-                      e.preventDefault();
-                      deleteField(field.fieldCode)
-                    }}
+                    <span
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteField(field.fieldCode);
+                      }}
                     >
                       Delete
                     </span>
                   </td>
                 </tr>
-                    ))}
+              ))}
             </tbody>
           </table>
         </div>

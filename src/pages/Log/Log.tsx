@@ -1,80 +1,110 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import ImagePicker from "../../Components/ImagePicker";
-import LogModel from '../../Models/LogModel';
+import LogModel from "../../Models/LogModel";
 import Swal from "sweetalert2";
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../store/Store';
-import { deleteLogState, fetchLogState, saveLogState, updateLogState } from '../../Slice/LogSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store/Store";
+import {
+  deleteLogState,
+  fetchLogState,
+  saveLogState,
+  updateLogState,
+} from "../../Slice/LogSlice";
+import { fetchCropState } from "../../Slice/CropSlice";
+import { fetchFieldState } from "../../Slice/FieldSlice";
+import { fetchStaffState } from "../../Slice/StaffSlice";
+import CropModel from "../../Models/CropModel";
+import FieldModel from "../../Models/FieldModel";
+import StaffModel from "../../Models/StaffModel";
 
 const Log = () => {
-
   const [image, setImage] = useState("");
-    const [logCode, setLogCode] = useState("");
-    const [date, setDate] = useState("");
-    const [field, setField] = useState("");
-    const [crop, setCrop] = useState("");
-    const [staff, setStaff] = useState("");
+  const [logCode, setLogCode] = useState("");
+  const [date, setDate] = useState("");
+  const [field, setField] = useState("");
+  const [crop, setCrop] = useState("");
+  const [staff, setStaff] = useState("");
 
-    // const [logs, setLogs] = useState<LogModel[]>([]);
-    const logs = useSelector((state)=>state.log);
+  // const [logs, setLogs] = useState<LogModel[]>([]);
+  const logs = useSelector((state) => state.log);
 
-    const dispatch = useDispatch<AppDispatch>();
+  const crops = useSelector((state) => state.crop);
 
-    useEffect(()=>{
-      if(logs.length === 0){
-        dispatch(fetchLogState());
+  const fields = useSelector((state) => state.field);
+  const staffs = useSelector((state) => state.staff);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (logs.length === 0) {
+      dispatch(fetchLogState());
+    }
+  }, [dispatch, logs.length]);
+
+  useEffect(() => {
+    if (crops.length === 0) {
+      dispatch(fetchCropState());
+    }
+  }, [dispatch, crops.length]);
+
+  useEffect(() => {
+    if (fields.length === 0) {
+      dispatch(fetchFieldState());
+    }
+  }, [dispatch, fields.length]);
+
+  useEffect(() => {
+    if (staffs.length === 0) {
+      dispatch(fetchStaffState());
+    }
+  }, [dispatch, staffs.length]);
+
+  const saveLog = () => {
+    const newLog = new LogModel(logCode, image, date, field, crop, staff);
+    dispatch(saveLogState(newLog));
+  };
+
+  const deleteLog = (code: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteLogState(code));
       }
-    },[dispatch,logs.length])
+    });
+  };
 
+  const editLog = (log: LogModel) => {
+    setLogCode(log.logCode);
+    setImage(log.image);
+    setDate(log.date);
+    setField(log.field);
+    setCrop(log.crop);
+    setStaff(log.staff);
+  };
 
-    const saveLog = () =>{
-      const newLog = new LogModel(logCode,image,date,field,crop,staff);
-      dispatch(saveLogState(newLog));
-    }
+  const updateLog = () => {
+    const updatedLogs = new LogModel(logCode, image, date, field, crop, staff);
+    dispatch(updateLogState(updatedLogs));
+  };
 
-    const deleteLog = (code:string) =>{
-      Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              dispatch(deleteLogState(code))
-            }
-          });
-    }
-
-    const editLog = (log:LogModel)=>{
-      setLogCode(log.logCode);
-      setImage(log.image);
-      setDate(log.date);
-      setField(log.field);
-      setCrop(log.crop);
-      setStaff(log.staff);
-    }
-
-    const updateLog = ()=>{
-      const updatedLogs =  new LogModel(logCode,image,date,field,crop,staff);
-      dispatch(updateLogState(updatedLogs));
-    }
-  
   return (
-
     <>
-    <div className="w-screen h-full p-10">
-   
+      <div className="w-screen h-full p-10">
         <h1 className="text-[3rem] font-sans font-bold text-emerald-500  bg-emerald-100 rounded-2xl text-center mb-10">
           MONITERING LOG MANAGE
         </h1>
         <form>
-        <div className="flex justify-center">
+          <div className="flex justify-center">
             <ImagePicker getImage={setImage}></ImagePicker>
           </div>
-  
+
           <div className="grid gap-6 mb-6 md:grid-cols-4">
             <div>
               <label
@@ -121,8 +151,12 @@ const Log = () => {
                 onChange={(e) => setCrop(e.target.value)}
               >
                 <option value=""> Crop</option>
-                <option value="CR001">CR001</option>
-                <option value="CR002">CR002</option>
+
+                {crops.map((crop: CropModel) => (
+                  <option key={crop.cropCode} value={crop.cropCode}>
+                    {crop.cropCode}
+                  </option>
+                ))}
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
@@ -141,8 +175,11 @@ const Log = () => {
                 onChange={(e) => setField(e.target.value)}
               >
                 <option value=""> Field</option>
-                <option value="F001">F001</option>
-                <option value="F002">F002</option>
+                {fields.map((field: FieldModel) => (
+                  <option key={field.fieldCode} value={field.fieldCode}>
+                    {field.fieldCode}
+                  </option>
+                ))}
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
@@ -161,14 +198,16 @@ const Log = () => {
                 onChange={(e) => setStaff(e.target.value)}
               >
                 <option value=""> Staff</option>
-                <option value="ST001">ST001</option>
-                <option value="ST002">ST002</option>
+                {staffs.map((staff: StaffModel) => (
+                  <option key={staff.staffId} value={staff.staffId}>
+                    {staff.staffId}
+                  </option>
+                ))}
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
               </p>
             </div>
-            
           </div>
           <div className="flex gap-5">
             <button
@@ -220,49 +259,41 @@ const Log = () => {
               </tr>
             </thead>
             <tbody>
-              {logs.map((log:LogModel,index)=>(
-                    <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                   <th className="px-6 py-4">
-                      {log.logCode}
-                    </th>
-                    <th className="px-6 py-4">
-                      {log.date}
-                    </th>
-                    <th className="px-6 py-4">
-                      {log.field}
-                    </th>
-                    <th className="px-6 py-4">
-                      {log.crop}
-                    </th>
-                    <th className="px-6 py-4">
-                      {log.staff}
-                    </th>
-                    <td className="px-6 py-4 flex gap-4">
-                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-                    onClick={(e)=>{
-                      e.preventDefault();
-                      editLog(log);
-                    }}
+              {logs.map((log: LogModel, index) => (
+                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                  <th className="px-6 py-4">{log.logCode}</th>
+                  <th className="px-6 py-4">{log.date}</th>
+                  <th className="px-6 py-4">{log.field}</th>
+                  <th className="px-6 py-4">{log.crop}</th>
+                  <th className="px-6 py-4">{log.staff}</th>
+                  <td className="px-6 py-4 flex gap-4">
+                    <span
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        editLog(log);
+                      }}
                     >
                       Edit
                     </span>
-                    <span className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
-                    onClick={(e)=>{
-                      e.preventDefault();
-                      deleteLog(log.logCode)
-                    }}
+                    <span
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteLog(log.logCode);
+                      }}
                     >
                       Delete
                     </span>
                   </td>
                 </tr>
-                    ))}
+              ))}
             </tbody>
           </table>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Log
+export default Log;

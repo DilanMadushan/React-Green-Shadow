@@ -3,14 +3,21 @@ import base64 from "base64-encode-file";
 import ImagePicker from "../../Components/ImagePicker";
 import CropModel from "../../Models/CropModel";
 import Swal from "sweetalert2";
-import { deleteCropState, fetchCropState, saveCropState, updateCropState } from "../../Slice/CropSlice";
+import {
+  deleteCropState,
+  fetchCropState,
+  saveCropState,
+  updateCropState,
+} from "../../Slice/CropSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
 import FieldModel from "../../Models/FieldModel";
 import { fetchFieldState } from "../../Slice/FieldSlice";
 
 const Crop = () => {
-  const [image, setImage] = useState("https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg");
+  const [image, setImage] = useState(
+    "https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg"
+  );
   const [cropCode, setCropCode] = useState("");
   const [name, setName] = useState("");
   const [scientificName, setScientificName] = useState("");
@@ -20,24 +27,23 @@ const Crop = () => {
 
   // const [crops, setCrops] = useState<CropModel[]>([]);
 
-  const crops = useSelector((state)=>state.crop);
+  const crops = useSelector((state) => state.crop);
 
-  const fields = useSelector((state)=>state.field);
+  const fields = useSelector((state) => state.field);
 
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(()=>{
-      if(crops.length === 0){
-        dispatch(fetchCropState());
-      }
-  },[dispatch,crops.length])
+  useEffect(() => {
+    if (crops.length === 0) {
+      dispatch(fetchCropState());
+    }
+  }, [dispatch, crops.length]);
 
-    useEffect(()=>{
-        if(fields.length === 0){
-          dispatch(fetchFieldState());
-        }
-    },[dispatch,fields.length])
-
+  useEffect(() => {
+    if (fields.length === 0) {
+      dispatch(fetchFieldState());
+    }
+  }, [dispatch, fields.length]);
 
   const saveCrop = () => {
     const newCrop = new CropModel(
@@ -69,23 +75,31 @@ const Crop = () => {
   };
 
   const updateCrop = (code: string) => {
-    crops.map((crop)=>{
-      if(crop.cropCode === code){
-        setCropCode(crop.cropCode)
-        setName(crop.name)
-        setScientificName(crop.scientificName)
-        setCategory(crop.category)
-        setSesson(crop.sesson)
-        setField(crop.field)
-        setImage(crop.image)
+    crops.map((crop) => {
+      if (crop.cropCode === code) {
+        setCropCode(crop.cropCode);
+        setName(crop.name);
+        setScientificName(crop.scientificName);
+        setCategory(crop.category);
+        setSesson(crop.sesson);
+        setField(crop.field);
+        setImage(crop.image);
       }
-    })
-  }
+    });
+  };
 
   const updateCrops = () => {
-    const updateCrop = new CropModel(image,cropCode,name,scientificName,sesson,category,field);
+    const updateCrop = new CropModel(
+      image,
+      cropCode,
+      name,
+      scientificName,
+      sesson,
+      category,
+      field
+    );
     dispatch(updateCropState(updateCrop));
-  }
+  };
 
   return (
     <>
@@ -199,12 +213,12 @@ const Crop = () => {
                 onChange={(e) => setField(e.target.value)}
               >
                 <option value=""> Field</option>
-                <option value="F002"> F002</option>
 
-                {fields.map((field:FieldModel)=>{     
-                  <option value={field.fieldCode}>{field.fieldCode}</option>
-                })}
-
+                {fields.map((field: FieldModel) => (
+                  <option key={field.fieldCode} value={field.fieldCode}>
+                    {field.fieldCode}
+                  </option>
+                ))}
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
@@ -260,7 +274,7 @@ const Crop = () => {
               </tr>
             </thead>
             <tbody>
-              {crops.map((crop:CropModel, index) => (
+              {crops.map((crop: CropModel, index) => (
                 <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                   <th className="px-6 py-4">{crop.cropCode}</th>
                   <th className="px-6 py-4">{crop.name}</th>
@@ -268,7 +282,12 @@ const Crop = () => {
                   <th className="px-6 py-4">{crop.sesson}</th>
                   <th className="px-6 py-4">{crop.field}</th>
                   <td className="px-6 py-4 flex gap-4">
-                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" onClick={() => {updateCrop(crop.cropCode)}}>
+                    <span
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                      onClick={() => {
+                        updateCrop(crop.cropCode);
+                      }}
+                    >
                       Edit
                     </span>
                     <span

@@ -3,7 +3,12 @@ import StaffModel from "../../Models/StaffModel";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
-import { deleteStaffState, fetchStaffState, saveStaffState, updateStaffState } from "../../Slice/StaffSlice";
+import {
+  deleteStaffState,
+  fetchStaffState,
+  saveStaffState,
+  updateStaffState,
+} from "../../Slice/StaffSlice";
 
 const Staff = () => {
   const [staffId, setStaffId] = useState("");
@@ -28,28 +33,38 @@ const Staff = () => {
     }
   }, [dispatch, staffs.length]);
 
-  const saveStaff = () =>{
-    const newStaff = new StaffModel(staffId,firstName,lastName,dob,gender,joinDate,address,mobile,email);
+  const saveStaff = () => {
+    const newStaff = new StaffModel(
+      staffId,
+      firstName,
+      lastName,
+      dob,
+      gender,
+      joinDate,
+      address,
+      mobile,
+      email
+    );
     dispatch(saveStaffState(newStaff));
-  }
+  };
 
   const deleteCrop = (code: string) => {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          dispatch(deleteStaffState(code));
-        }
-      });
-    };
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteStaffState(code));
+      }
+    });
+  };
 
-    const editStaff = (staff: StaffModel) => {
+  const editStaff = (staff: StaffModel) => {
     setStaffId(staff.staffId);
     setFirstName(staff.firstName);
     setLastName(staff.lastName);
@@ -59,12 +74,22 @@ const Staff = () => {
     setAddress(staff.address);
     setMobile(staff.mobile);
     setEmail(staff.email);
-    }
+  };
 
-    const updateStaff = () => {
-        const updatedStaff = new StaffModel(staffId,firstName,lastName,dob,gender,joinDate,address,mobile,email)
-        dispatch(updateStaffState(updatedStaff));
-      }
+  const updateStaff = () => {
+    const updatedStaff = new StaffModel(
+      staffId,
+      firstName,
+      lastName,
+      dob,
+      gender,
+      joinDate,
+      address,
+      mobile,
+      email
+    );
+    dispatch(updateStaffState(updatedStaff));
+  };
 
   return (
     <>
@@ -73,7 +98,6 @@ const Staff = () => {
           STAFF MANAGE
         </h1>
         <form>
-
           <div className="grid gap-6 mb-6 md:grid-cols-3">
             <div>
               <label
@@ -282,46 +306,36 @@ const Staff = () => {
               </tr>
             </thead>
             <tbody>
-              {staffs.map((staff:StaffModel,index)=>(
-                    <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                   <th className="px-6 py-4">
-                      {staff.staffId}
-                    </th>
-                    <th className="px-6 py-4">
-                      {staff.firstName}
-                    </th>
-                    <th className="px-6 py-4">
-                      {staff.gender}
-                    </th>
-                    <th className="px-6 py-4">
-                      {staff.address}
-                    </th>
-                    <th className="px-6 py-4">
-                      {staff.mobile}
-                    </th>
-                    <th className="px-6 py-4">
-                      {staff.email}
-                    </th>
-                    <td className="px-6 py-4 flex gap-4">
-                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
-                    onClick={(e)=>{
-                      e.preventDefault();
-                      editStaff(staff)
-                    }}
+              {staffs.map((staff: StaffModel, index) => (
+                <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                  <th className="px-6 py-4">{staff.staffId}</th>
+                  <th className="px-6 py-4">{staff.firstName}</th>
+                  <th className="px-6 py-4">{staff.gender}</th>
+                  <th className="px-6 py-4">{staff.address}</th>
+                  <th className="px-6 py-4">{staff.mobile}</th>
+                  <th className="px-6 py-4">{staff.email}</th>
+                  <td className="px-6 py-4 flex gap-4">
+                    <span
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        editStaff(staff);
+                      }}
                     >
                       Edit
                     </span>
-                    <span className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
-                    onClick={(e)=>{
-                      e.preventDefault();
-                      deleteCrop(staff.staffId)
-                    }}
+                    <span
+                      className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteCrop(staff.staffId);
+                      }}
                     >
                       Delete
                     </span>
                   </td>
                 </tr>
-                    ))}
+              ))}
             </tbody>
           </table>
         </div>

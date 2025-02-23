@@ -1,37 +1,67 @@
-import React, { use, useEffect, useState } from 'react'
-import EquipmentModel from '../../Models/EquipmentModel'
+import React, { use, useEffect, useState } from "react";
+import EquipmentModel from "../../Models/EquipmentModel";
 import Swal from "sweetalert2";
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../store/Store';
-import { deleteEquipmentState, fetchEquipmentState, saveEquipmentState, updateEquipmentState } from '../../Slice/EquipmentSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store/Store";
+import {
+  deleteEquipmentState,
+  fetchEquipmentState,
+  saveEquipmentState,
+  updateEquipmentState,
+} from "../../Slice/EquipmentSlice";
+import { fetchCropState } from "../../Slice/CropSlice";
+import { fetchFieldState } from "../../Slice/FieldSlice";
+import { fetchStaffState } from "../../Slice/StaffSlice";
+import StaffModel from "../../Models/StaffModel";
+import FieldModel from "../../Models/FieldModel";
 
 const Equipment = () => {
-
-  const [equipmentId,setEquipmentId] = useState("")
-  const [name,setName] = useState("")
-  const [type,setType] = useState("")
-  const [status,setStatus] = useState("")
-  const [staff,setStaff] = useState("")
-  const [field,setField] = useState("")
+  const [equipmentId, setEquipmentId] = useState("");
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [status, setStatus] = useState("");
+  const [staff, setStaff] = useState("");
+  const [field, setField] = useState("");
 
   // const [equipments,setEquipments] = useState<EquipmentModel[]>([]);
 
   const equipments = useSelector((state) => state.equipment);
+  const fields = useSelector((state) => state.field);
+  const staffs = useSelector((state) => state.staff);
 
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (equipments.length === 0) {
-      dispatch(fetchEquipmentState());    
+      dispatch(fetchEquipmentState());
     }
   }, [dispatch, equipments.length]);
 
-  const SaveEquipment = () => {
-    const newEquipment = new EquipmentModel(equipmentId,name,type,status,field,staff);
-    dispatch(saveEquipmentState(newEquipment));
-  }
+  useEffect(() => {
+    if (fields.length === 0) {
+      dispatch(fetchFieldState());
+    }
+  }, [dispatch, fields.length]);
 
-  const deleteEquipment = (id:string) => {
+  useEffect(() => {
+    if (staffs.length === 0) {
+      dispatch(fetchStaffState());
+    }
+  }, [dispatch, staffs.length]);
+
+  const SaveEquipment = () => {
+    const newEquipment = new EquipmentModel(
+      equipmentId,
+      name,
+      type,
+      status,
+      field,
+      staff
+    );
+    dispatch(saveEquipmentState(newEquipment));
+  };
+
+  const deleteEquipment = (id: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -45,22 +75,28 @@ const Equipment = () => {
         dispatch(deleteEquipmentState(id));
       }
     });
-  }
+  };
 
-  const editEquipment = (equipment:EquipmentModel) => {
-    setEquipmentId(equipment.equipmentId)
-    setName(equipment.name)
-    setType(equipment.type)
-    setStatus(equipment.status)
-    setStaff(equipment.staff)
-    setField(equipment.field)
-  }
+  const editEquipment = (equipment: EquipmentModel) => {
+    setEquipmentId(equipment.equipmentId);
+    setName(equipment.name);
+    setType(equipment.type);
+    setStatus(equipment.status);
+    setStaff(equipment.staff);
+    setField(equipment.field);
+  };
 
   const updateEquipment = () => {
-    
-    const updatedEquipment = new EquipmentModel(equipmentId,name,type,status,field,staff);
+    const updatedEquipment = new EquipmentModel(
+      equipmentId,
+      name,
+      type,
+      status,
+      field,
+      staff
+    );
     dispatch(updateEquipmentState(updatedEquipment));
-  }
+  };
 
   return (
     <>
@@ -105,10 +141,10 @@ const Equipment = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-            
+
             <div className="w-full flex flex-col mb-3">
               <label className="block text-sm font-medium text-gray-700 mb-1 ">
-              Type
+                Type
               </label>
               <select
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
@@ -126,8 +162,6 @@ const Equipment = () => {
               </p>
             </div>
 
-            
-
             <div className="w-full flex flex-col mb-3">
               <label className="block text-sm font-medium text-gray-700 mb-1 ">
                 Status
@@ -139,7 +173,7 @@ const Equipment = () => {
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
-                <option value=""> Field</option>
+                <option value=""> Status</option>
                 <option value="AVILABLE">AVILABLE</option>
                 <option value="INAVALABLE">INAVALABLE</option>
               </select>
@@ -150,7 +184,7 @@ const Equipment = () => {
 
             <div className="w-full flex flex-col mb-3">
               <label className="block text-sm font-medium text-gray-700 mb-1 ">
-              Stff
+                Stff
               </label>
               <select
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
@@ -159,9 +193,12 @@ const Equipment = () => {
                 value={staff}
                 onChange={(e) => setStaff(e.target.value)}
               >
-                <option value=""> Stff</option>
-                <option value="ST001">ST001</option>
-                <option value="ST002">ST002</option>
+                <option value=""> Staff</option>
+                {staffs.map((staff: StaffModel) => (
+                  <option key={staff.staffId} value={staff.staffId}>
+                    {staff.staffId}
+                  </option>
+                ))}
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
@@ -180,14 +217,16 @@ const Equipment = () => {
                 onChange={(e) => setField(e.target.value)}
               >
                 <option value=""> Field</option>
-                <option value="F001">F001</option>
-                <option value="F002">F002</option>
+                {fields.map((field: FieldModel) => (
+                  <option key={field.fieldCode} value={field.fieldCode}>
+                    {field.fieldCode}
+                  </option>
+                ))}
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
               </p>
             </div>
-
           </div>
 
           <div className="flex gap-5">
@@ -222,19 +261,19 @@ const Equipment = () => {
                   Equipment Id
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Name
+                  Name
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Type
+                  Type
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Status
+                  Status
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Staff
+                  Staff
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Field
+                  Field
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Action
@@ -242,7 +281,7 @@ const Equipment = () => {
               </tr>
             </thead>
             <tbody>
-              {equipments.map((equipment:EquipmentModel, index) => (
+              {equipments.map((equipment: EquipmentModel, index) => (
                 <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
                   <th className="px-6 py-4">{equipment.equipmentId}</th>
                   <th className="px-6 py-4">{equipment.name}</th>
@@ -251,18 +290,20 @@ const Equipment = () => {
                   <th className="px-6 py-4">{equipment.staff}</th>
                   <th className="px-6 py-4">{equipment.field}</th>
                   <td className="px-6 py-4 flex gap-4">
-                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" 
-                    onClick={(e) => {
+                    <span
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                      onClick={(e) => {
                         e.preventDefault();
                         editEquipment(equipment);
-                    }}>
+                      }}
+                    >
                       Edit
                     </span>
                     <span
                       className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
                       onClick={(e) => {
-                       e.preventDefault();
-                       deleteEquipment(equipment.equipmentId);
+                        e.preventDefault();
+                        deleteEquipment(equipment.equipmentId);
                       }}
                     >
                       Delete
@@ -275,7 +316,7 @@ const Equipment = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Equipment
+export default Equipment;

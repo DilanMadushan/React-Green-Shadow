@@ -1,66 +1,93 @@
-import React, { useEffect, useState } from 'react'
-import VehicleModel from '../../Models/VehicleModel';
+import React, { useEffect, useState } from "react";
+import VehicleModel from "../../Models/VehicleModel";
 import Swal from "sweetalert2";
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../store/Store';
-import { deleteVehicleState, fetchVehicleState, saveVehicleState, updateVehicleState } from '../../Slice/VehicleSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store/Store";
+import {
+  deleteVehicleState,
+  fetchVehicleState,
+  saveVehicleState,
+  updateVehicleState,
+} from "../../Slice/VehicleSlice";
+import StaffModel from "../../Models/StaffModel";
+import { fetchStaffState } from "../../Slice/StaffSlice";
 
 const Vehicle = () => {
+  const [vehicleCode, setVehicleCode] = useState("");
+  const [plateNumber, setPlateNumber] = useState("");
+  const [category, setCategory] = useState("");
+  const [fualType, setFualType] = useState("");
+  const [status, setStatus] = useState("");
+  const [staff, setStaff] = useState("");
 
-    const [vehicleCode, setVehicleCode] = useState("");
-    const [plateNumber, setPlateNumber] = useState("");
-    const [category, setCategory] = useState("");
-    const [fualType, setFualType] = useState("");
-    const [status, setStatus] = useState("");
-    const [staff,setStaff] = useState("")
+  // const [vehicles, setVehicles] = useState<VehicleModel[]>([]);
 
-    // const [vehicles, setVehicles] = useState<VehicleModel[]>([]); 
+  const vehicles = useSelector((state) => state.vehicle);
+  const staffs = useSelector((state) => state.staff);
 
-    const vehicles = useSelector((state) => state.vehicle);
+  const dispatch = useDispatch<AppDispatch>();
 
-    const dispatch = useDispatch<AppDispatch>();
-
-    useEffect(() => {
-        if(vehicles.length === 0){
-            dispatch(fetchVehicleState())
-        }
-    }, [dispatch, vehicles.length]);
-
-    const saveVehicle = () => {
-        const newVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status,staff);
-        dispatch(saveVehicleState(newVehicle));
-    };
-
-    const deleteVehicle = (code: string) => {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-          }).then((result) => {
-            if (result.isConfirmed) {
-             dispatch(deleteVehicleState(code));
-            }
-          });
+  useEffect(() => {
+    if (vehicles.length === 0) {
+      dispatch(fetchVehicleState());
     }
+  }, [dispatch, vehicles.length]);
 
-    const editVehicle = (vehicle:VehicleModel) => {
-        setVehicleCode(vehicle.vehicleCode)
-        setPlateNumber(vehicle.plateNumber)
-        setCategory(vehicle.categary)
-        setFualType(vehicle.fuelType)
-        setStatus(vehicle.status)
-        setStaff(vehicle.staff)
+  useEffect(() => {
+    if (staffs.length === 0) {
+      dispatch(fetchStaffState());
     }
+  }, [dispatch, staffs.length]);
 
-    const updateVehicle = () => {
-        const updateVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status,staff);
-        dispatch(updateVehicleState(updateVehicle))
-    }
-  
+  const saveVehicle = () => {
+    const newVehicle = new VehicleModel(
+      vehicleCode,
+      plateNumber,
+      category,
+      fualType,
+      status,
+      staff
+    );
+    dispatch(saveVehicleState(newVehicle));
+  };
+
+  const deleteVehicle = (code: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteVehicleState(code));
+      }
+    });
+  };
+
+  const editVehicle = (vehicle: VehicleModel) => {
+    setVehicleCode(vehicle.vehicleCode);
+    setPlateNumber(vehicle.plateNumber);
+    setCategory(vehicle.categary);
+    setFualType(vehicle.fuelType);
+    setStatus(vehicle.status);
+    setStaff(vehicle.staff);
+  };
+
+  const updateVehicle = () => {
+    const updateVehicle = new VehicleModel(
+      vehicleCode,
+      plateNumber,
+      category,
+      fualType,
+      status,
+      staff
+    );
+    dispatch(updateVehicleState(updateVehicle));
+  };
+
   return (
     <>
       {/* {image} */}
@@ -104,10 +131,10 @@ const Vehicle = () => {
                 onChange={(e) => setPlateNumber(e.target.value)}
               />
             </div>
-            
+
             <div className="w-full flex flex-col mb-3">
               <label className="block text-sm font-medium text-gray-700 mb-1 ">
-              Category
+                Category
               </label>
               <select
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
@@ -126,7 +153,7 @@ const Vehicle = () => {
 
             <div className="w-full flex flex-col mb-3">
               <label className="block text-sm font-medium text-gray-700 mb-1 ">
-              Fual Type
+                Fual Type
               </label>
               <select
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
@@ -155,7 +182,7 @@ const Vehicle = () => {
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
-                <option value=""> Field</option>
+                <option value=""> Status</option>
                 <option value="AVILABLE">AVILABLE</option>
                 <option value="INAVALABLE">INAVALABLE</option>
               </select>
@@ -166,7 +193,7 @@ const Vehicle = () => {
 
             <div className="w-full flex flex-col mb-3">
               <label className="block text-sm font-medium text-gray-700 mb-1 ">
-              Stff
+                Stff
               </label>
               <select
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
@@ -176,14 +203,16 @@ const Vehicle = () => {
                 onChange={(e) => setStaff(e.target.value)}
               >
                 <option value=""> Stff</option>
-                <option value="ST001">ST001</option>
-                <option value="ST002">ST002</option>
+                {staffs.map((staff: StaffModel) => (
+                  <option key={staff.staffId} value={staff.staffId}>
+                    {staff.staffId}
+                  </option>
+                ))}
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
               </p>
             </div>
-
           </div>
           <div className="flex gap-5">
             <button
@@ -217,19 +246,19 @@ const Vehicle = () => {
                   Vehicle Code
                 </th>
                 <th scope="col" className="px-6 py-3">
-                License Plate Number
+                  License Plate Number
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Category
+                  Category
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Fual Type
+                  Fual Type
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Status
+                  Status
                 </th>
                 <th scope="col" className="px-6 py-3">
-                Staff
+                  Staff
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Action
@@ -246,18 +275,20 @@ const Vehicle = () => {
                   <th className="px-6 py-4">{vehicle.status}</th>
                   <th className="px-6 py-4">{vehicle.staff}</th>
                   <td className="px-6 py-4 flex gap-4">
-                    <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" 
-                    onClick={(e) => {
+                    <span
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
+                      onClick={(e) => {
                         e.preventDefault();
                         editVehicle(vehicle);
-                    }}>
+                      }}
+                    >
                       Edit
                     </span>
                     <span
                       className="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer"
                       onClick={(e) => {
-                       e.preventDefault();
-                       deleteVehicle(vehicle.vehicleCode);
+                        e.preventDefault();
+                        deleteVehicle(vehicle.vehicleCode);
                       }}
                     >
                       Delete
@@ -270,7 +301,7 @@ const Vehicle = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Vehicle
+export default Vehicle;
