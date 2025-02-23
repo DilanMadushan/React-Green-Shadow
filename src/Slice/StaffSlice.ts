@@ -35,9 +35,9 @@ export const fetchStaffState = createAsyncThunk(
 
 export const deleteStaffState = createAsyncThunk(
     'staff/deleteStaffState',
-    async(staff:StaffModel)=>{
+    async(code:string)=>{
         try{
-            const response = await api.post('staff/delete',staff);
+            const response = await api.delete('staff/delete/'+code);
             return response.data;
         }catch(e){
             console.log(e);

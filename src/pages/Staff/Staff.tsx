@@ -3,7 +3,7 @@ import StaffModel from "../../Models/StaffModel";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
-import { fetchStaffState, saveStaffState } from "../../Slice/StaffSlice";
+import { deleteStaffState, fetchStaffState, saveStaffState } from "../../Slice/StaffSlice";
 
 const Staff = () => {
   const [staffId, setStaffId] = useState("");
@@ -44,7 +44,7 @@ const Staff = () => {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          // setStaffs(staffs.filter((staff) => staff.staffId != code));
+          dispatch(deleteStaffState(code));
         }
       });
     };
