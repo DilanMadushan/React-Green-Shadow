@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import { deleteCropState, fetchCropState, saveCropState, updateCropState } from "../../Slice/CropSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/Store";
+import FieldModel from "../../Models/FieldModel";
+import { fetchFieldState } from "../../Slice/FieldSlice";
 
 const Crop = () => {
   const [image, setImage] = useState("https://icon-library.com/images/no-picture-available-icon/no-picture-available-icon-1.jpg");
@@ -20,6 +22,8 @@ const Crop = () => {
 
   const crops = useSelector((state)=>state.crop);
 
+  const fields = useSelector((state)=>state.field);
+
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(()=>{
@@ -27,6 +31,12 @@ const Crop = () => {
         dispatch(fetchCropState());
       }
   },[dispatch,crops.length])
+
+    useEffect(()=>{
+        if(fields.length === 0){
+          dispatch(fetchFieldState());
+        }
+    },[dispatch,fields.length])
 
 
   const saveCrop = () => {
@@ -184,13 +194,17 @@ const Crop = () => {
               <select
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
                 name="integration[city_id]"
-                id="integration_city_id"
+                id="fieldId"
                 value={field}
                 onChange={(e) => setField(e.target.value)}
               >
                 <option value=""> Field</option>
-                <option value="F001">F001</option>
-                <option value="F002">F002</option>
+                <option value="F002"> F002</option>
+
+                {fields.map((field:FieldModel)=>{     
+                  <option value={field.fieldCode}>{field.fieldCode}</option>
+                })}
+
               </select>
               <p className="text-sm text-red-500 hidden mt-3" id="error">
                 Please fill out this field.
