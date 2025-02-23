@@ -3,7 +3,7 @@ import VehicleModel from '../../Models/VehicleModel';
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/Store';
-import { fetchVehicleState } from '../../Slice/VehicleSlice';
+import { fetchVehicleState, saveVehicleState } from '../../Slice/VehicleSlice';
 
 const Vehicle = () => {
 
@@ -28,7 +28,7 @@ const Vehicle = () => {
 
     const saveVehicle = () => {
         const newVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status,staff);
-        // setVehicles([...vehicles, newVehicle]);
+        dispatch(saveVehicleState(newVehicle));
     };
 
     const deleteVehicle = (code: string) => {
