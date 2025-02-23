@@ -12,6 +12,7 @@ const Equipment = () => {
   const [type,setType] = useState("")
   const [status,setStatus] = useState("")
   const [staff,setStaff] = useState("")
+  const [field,setField] = useState("")
 
   // const [equipments,setEquipments] = useState<EquipmentModel[]>([]);
 
@@ -26,7 +27,7 @@ const Equipment = () => {
   }, [dispatch, equipments.length]);
 
   const SaveEquipment = () => {
-    const newEquipment = new EquipmentModel(equipmentId,name,type,status,staff);
+    const newEquipment = new EquipmentModel(equipmentId,name,type,status,field,staff);
     dispatch(saveEquipmentState(newEquipment));
   }
 
@@ -51,12 +52,14 @@ const Equipment = () => {
     setName(equipment.name)
     setType(equipment.type)
     setStatus(equipment.status)
+    setStaff(equipment.staff)
+    setField(equipment.field)
   }
 
   const updateEquipment = () => {
     const updatedEquipments = equipments.map((equipment) => {
       if (equipment.equipmentId === equipmentId) {
-        return new EquipmentModel(equipmentId,name,type,status,staff);
+        // return new EquipmentModel(equipmentId,name,type,status,staff);
       } else {
         return equipment;
       }
@@ -170,6 +173,26 @@ const Equipment = () => {
               </p>
             </div>
 
+            <div className="w-full flex flex-col mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-1 ">
+                Field
+              </label>
+              <select
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2  focus:ring-[#318eda] focus:border-[#318eda] outline-none transition-all"
+                name="integration[city_id]"
+                id="integration_city_id"
+                value={field}
+                onChange={(e) => setField(e.target.value)}
+              >
+                <option value=""> Field</option>
+                <option value="F001">F001</option>
+                <option value="F002">F002</option>
+              </select>
+              <p className="text-sm text-red-500 hidden mt-3" id="error">
+                Please fill out this field.
+              </p>
+            </div>
+
           </div>
 
           <div className="flex gap-5">
@@ -216,6 +239,9 @@ const Equipment = () => {
                 Staff
                 </th>
                 <th scope="col" className="px-6 py-3">
+                Field
+                </th>
+                <th scope="col" className="px-6 py-3">
                   Action
                 </th>
               </tr>
@@ -228,6 +254,7 @@ const Equipment = () => {
                   <th className="px-6 py-4">{equipment.type}</th>
                   <th className="px-6 py-4">{equipment.status}</th>
                   <th className="px-6 py-4">{equipment.staff}</th>
+                  <th className="px-6 py-4">{equipment.field}</th>
                   <td className="px-6 py-4 flex gap-4">
                     <span className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer" 
                     onClick={(e) => {
