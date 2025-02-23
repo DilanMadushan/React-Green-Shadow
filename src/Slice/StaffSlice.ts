@@ -45,6 +45,18 @@ export const deleteStaffState = createAsyncThunk(
     }
 )
 
+export const updateStaffState = createAsyncThunk(
+    'staff/updateStaffState',
+    async(staff:StaffModel)=>{
+        try{
+            const response = await api.patch('staff/update',staff);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 const staffSlice = createSlice({
     name:"staff",
     initialState,
@@ -80,6 +92,22 @@ const staffSlice = createSlice({
         console.log(action.payload);
      })
         .addCase(deleteStaffState.pending,(state,action)=>{
+            console.log("pending");
+        })
+        builder
+        .addCase(updateStaffState.fulfilled,(state,action)=>{
+            return state = state.map((staff:StaffModel)=>{
+                if(staff.staffId===action.payload.staffId){
+                    return new StaffModel(staff.staffId,staff.firstName,staff.lastName,staff.dob,staff.gender,staff.joinDate,staff.address,staff.mobile,staff.email);
+                }else{
+                    return staff;
+                }
+            })
+        })
+        .addCase(updateStaffState.rejected,(state,action)=>{
+            console.log(action.payload);
+        })
+        .addCase(updateStaffState.pending,(state,action)=>{
             console.log("pending");
         })
     }
