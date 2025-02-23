@@ -33,6 +33,18 @@ export const fetchStaffState = createAsyncThunk(
     }
 )
 
+export const deleteStaffState = createAsyncThunk(
+    'staff/deleteStaffState',
+    async(staff:StaffModel)=>{
+        try{
+            const response = await api.post('staff/delete',staff);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 const staffSlice = createSlice({
     name:"staff",
     initialState,
@@ -60,6 +72,16 @@ const staffSlice = createSlice({
      .addCase(fetchStaffState.pending,(state,action)=>{
         console.log("pending");
      })
+     builder
+     .addCase(deleteStaffState.fulfilled,(state,action)=>{
+        return state = state.filter((staff:StaffModel)=>staff.staffId!==action.payload.staffId);
+     })
+     .addCase(deleteStaffState.rejected,(state,action)=>{
+        console.log(action.payload);
+     })
+        .addCase(deleteStaffState.pending,(state,action)=>{
+            console.log("pending");
+        })
     }
 })
 
