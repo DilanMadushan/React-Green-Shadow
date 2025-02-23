@@ -21,6 +21,18 @@ export const saveStaffState = createAsyncThunk(
     }
 )
 
+export const fetchStaffState = createAsyncThunk(
+    'staff/fetchStaffState',
+    async()=>{
+        try{
+            const response = await api.get('staff/getall');
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 const staffSlice = createSlice({
     name:"staff",
     initialState,
@@ -34,6 +46,18 @@ const staffSlice = createSlice({
         console.log(action.payload);
      })
      .addCase(saveStaffState.pending,(state,action)=>{
+        console.log("pending");
+     })
+     builder
+     .addCase(fetchStaffState.fulfilled,(state,action)=>{
+        action.payload.map((staff:StaffModel)=>{
+            state.push(staff);
+        })
+     })
+     .addCase(fetchStaffState.rejected,(state,action)=>{
+        console.log(action.payload);
+     })
+     .addCase(fetchStaffState.pending,(state,action)=>{
         console.log("pending");
      })
     }
