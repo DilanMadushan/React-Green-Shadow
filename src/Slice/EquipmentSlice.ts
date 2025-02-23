@@ -44,6 +44,18 @@ export const deleteEquipmentState = createAsyncThunk(
     }
 )
 
+export const updateEquipmentState = createAsyncThunk(
+    'equipment/updateEquipmentState',
+    async(equipment:EquipmentModel)=>{
+        try{
+            const response = await api.patch(`equipment/update`,equipment);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }       
+    }
+)
+
 const equipmentSlice = createSlice({
     name:"equipment",
     initialState,
@@ -80,6 +92,21 @@ const equipmentSlice = createSlice({
         })
         .addCase(deleteEquipmentState.pending,(state,action)=>{
             console.log("pending");        
+        })
+        builder
+        .addCase(updateEquipmentState.fulfilled,(state,action)=>{
+          return state = state.map((equipment:EquipmentModel)=>{
+                if(equipment.equipmentId===action.payload.equipmentId){
+                    return action.payload;
+                }
+                return equipment;
+          });
+        })
+        .addCase(updateEquipmentState.rejected,(state,action)=>{
+            console.log(action.payload);
+        })
+        .addCase(updateEquipmentState.pending,(state,action)=>{
+            console.log("pending");
         })
     }
 })

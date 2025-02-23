@@ -3,7 +3,7 @@ import EquipmentModel from '../../Models/EquipmentModel'
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/Store';
-import { deleteEquipmentState, fetchEquipmentState, saveEquipmentState } from '../../Slice/EquipmentSlice';
+import { deleteEquipmentState, fetchEquipmentState, saveEquipmentState, updateEquipmentState } from '../../Slice/EquipmentSlice';
 
 const Equipment = () => {
 
@@ -57,14 +57,9 @@ const Equipment = () => {
   }
 
   const updateEquipment = () => {
-    const updatedEquipments = equipments.map((equipment) => {
-      if (equipment.equipmentId === equipmentId) {
-        // return new EquipmentModel(equipmentId,name,type,status,staff);
-      } else {
-        return equipment;
-      }
-    });
-    // setEquipments(updatedEquipments);
+    
+    const updatedEquipment = new EquipmentModel(equipmentId,name,type,status,field,staff);
+    dispatch(updateEquipmentState(updatedEquipment));
   }
 
   return (
