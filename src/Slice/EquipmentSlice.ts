@@ -32,6 +32,18 @@ export const fetchEquipmentState = createAsyncThunk(
     }
 )
 
+export const deleteEquipmentState = createAsyncThunk(
+    'equipment/deleteEquipmentState',
+    async(equipmentId:string)=>{
+        try{
+            const response = await api.delete(`equipment/delete/${equipmentId}`);
+            return response.data;
+        }catch(e){
+            console.log(e);
+        }
+    }
+)
+
 const equipmentSlice = createSlice({
     name:"equipment",
     initialState,
@@ -58,6 +70,16 @@ const equipmentSlice = createSlice({
         })
         .addCase(fetchEquipmentState.pending,(state,action)=>{
             console.log("pending");
+        })
+        builder
+        .addCase(deleteEquipmentState.fulfilled,(state,action)=>{
+            return state.filter((equipment:EquipmentModel)=>equipment.equipmentId!==action.payload.equipmentId);
+        })
+        .addCase(deleteEquipmentState.rejected,(state,action)=>{
+            console.log(action.payload);
+        })
+        .addCase(deleteEquipmentState.pending,(state,action)=>{
+            console.log("pending");        
         })
     }
 })

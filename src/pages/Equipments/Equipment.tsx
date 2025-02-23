@@ -3,7 +3,7 @@ import EquipmentModel from '../../Models/EquipmentModel'
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store/Store';
-import { fetchEquipmentState, saveEquipmentState } from '../../Slice/EquipmentSlice';
+import { deleteEquipmentState, fetchEquipmentState, saveEquipmentState } from '../../Slice/EquipmentSlice';
 
 const Equipment = () => {
 
@@ -42,7 +42,7 @@ const Equipment = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // setEquipments(equipments.filter((equipment)=>(equipment.equipmentId != id)))
+        dispatch(deleteEquipmentState(id));
       }
     });
   }
