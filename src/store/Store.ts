@@ -4,6 +4,7 @@ import FieldReducer from "../Slice/FieldSlice"
 import LogReducer from "../Slice/LogSlice"
 import staffReducer from "../Slice/StaffSlice"
 import EquipmentReducer from "../Slice/EquipmentSlice"
+import VehicleReducer from "../Slice/VehicleSlice"
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     field : FieldReducer,
     log:LogReducer,
     staff:staffReducer,
-    equipment:EquipmentReducer
+    equipment:EquipmentReducer,
+    vehicle:VehicleReducer
   },
 })
 

@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import VehicleModel from '../../Models/VehicleModel';
 import Swal from "sweetalert2";
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../store/Store';
+import { fetchVehicleState } from '../../Slice/VehicleSlice';
 
 const Vehicle = () => {
 
@@ -11,11 +14,21 @@ const Vehicle = () => {
     const [status, setStatus] = useState("");
     const [staff,setStaff] = useState("")
 
-    const [vehicles, setVehicles] = useState<VehicleModel[]>([]); 
+    // const [vehicles, setVehicles] = useState<VehicleModel[]>([]); 
+
+    const vehicles = useSelector((state) => state.vehicle);
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        if(vehicles.length === 0){
+            dispatch(fetchVehicleState())
+        }
+    }, [dispatch, vehicles.length]);
 
     const saveVehicle = () => {
         const newVehicle = new VehicleModel(vehicleCode,plateNumber,category,fualType,status,staff);
-        setVehicles([...vehicles, newVehicle]);
+        // setVehicles([...vehicles, newVehicle]);
     };
 
     const deleteVehicle = (code: string) => {
@@ -29,7 +42,7 @@ const Vehicle = () => {
             confirmButtonText: "Yes, delete it!",
           }).then((result) => {
             if (result.isConfirmed) {
-              setVehicles(vehicles.filter((vehicle)=>(vehicle.vehicleCode != code)))
+              // setVehicles(vehicles.filter((vehicle)=>(vehicle.vehicleCode != code)))
             }
           });
     }
@@ -40,6 +53,7 @@ const Vehicle = () => {
         setCategory(vehicle.categary)
         setFualType(vehicle.fuelType)
         setStatus(vehicle.status)
+        setStaff(vehicle.staff)
     }
 
     const updateVehicle = () => {
@@ -50,7 +64,7 @@ const Vehicle = () => {
                 return vehicle;
             }
         });
-        setVehicles(updatedVehicles); 
+        // setVehicles(updatedVehicles); 
     }
   
   return (
