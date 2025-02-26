@@ -11,11 +11,16 @@ import Vehicle from "./pages/Vehicle/Vehicle";
 import {Provider} from "react-redux";
 import {store} from "./store/Store.ts";
 import Login from "./pages/Login/Login.tsx";
+import SignUp from "./pages/SignUp/SignUp.tsx";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
   },
   {
     path: "",

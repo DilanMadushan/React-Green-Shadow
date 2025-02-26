@@ -5,6 +5,9 @@ const Login = () => {
     const onSubmit = ()=>{
         navigate('/dashboard');
     }
+    const register = ()=>{
+        navigate('/signup');
+    }
 
   return (
     <div className='flex items-center justify-center h-screen bg-gradient-to-r from-green-900 to-emerald-500'>
@@ -35,7 +38,9 @@ const Login = () => {
             Login
           </button>
         </form>
-        <p className='mt-4 text-center text-gray-600'>Don't have an account? <a href='#' className='text-emerald-600 font-semibold'>Sign Up</a></p>
+        <span className='mt-4 text-center text-gray-600'>Don't have an account? <span className='text-emerald-600 font-semibold cursor-pointer'
+        onClick={register}
+        >Sign Up</span></span>
       </div>
     </div>
   );
