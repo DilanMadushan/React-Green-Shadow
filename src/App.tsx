@@ -10,21 +10,26 @@ import Staff from "./pages/Staff/Staff";
 import Vehicle from "./pages/Vehicle/Vehicle";
 import {Provider} from "react-redux";
 import {store} from "./store/Store.ts";
+import Login from "./pages/Login/Login.tsx";
 
 const routes = createBrowserRouter([
+  {
+    path: "/",
+    element: <Login />,
+  },
   {
     path: "",
     element: <RootLayout />,
     children: [
       { path: "/crop", element: <Crop /> },
-      { path: "/", element: <DashBoard /> },
+      { path: "/dashboard", element: <DashBoard /> },
       { path: "/equipment", element: <Equipment /> },
       { path: "/field", element: <Field /> },
       { path: "/log", element: <Log /> },
       { path: "/staff", element: <Staff /> },
       { path: "/vehicle", element: <Vehicle /> }
     ],
-  },
+  }
 ]);
 
 function App() {
