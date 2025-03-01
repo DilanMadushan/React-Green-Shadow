@@ -3,19 +3,29 @@ import CropModel from "../Models/CropModel";
 import axios from "axios";
 import Log from "../pages/Log/Log";
 import Crop from "../pages/Crop/Crop";
+import Cookies from 'js-cookie';
 
 const api = axios.create({
     baseURL : "http://localhost:3000/"
 })
 
+const token = Cookies.get('token');
+
 export const initialState : CropModel[] =[];
+
+
+axios.defaults.withCredentials = true;
 
 export const saveCropState = createAsyncThunk(
     'vehicle/saveCropState',
     async(crop:CropModel)=>{
 
         try{
-            const response = await api.post('crop/save',crop);
+            const response = await api.post('crop/save',crop,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -26,7 +36,11 @@ export const fetchCropState = createAsyncThunk(
     'crop/fetchCropState',
     async()=>{
         try{
-            const response = await api.get('crop/getall');
+            const response = await api.get('crop/getall', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -38,7 +52,11 @@ export const updateCropState = createAsyncThunk(
     'crop/updateCropState',
     async(crop:CropModel)=>{
         try{
-            const response = await api.patch('crop/update',crop);
+            const response = await api.patch('crop/update',crop,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -50,7 +68,11 @@ export const deleteCropState = createAsyncThunk(
     'crop/deleteCropState',
     async(cropCode:string)=>{
         try{
-            const response = await api.delete(`crop/delete/${cropCode}`);
+            const response = await api.delete(`crop/delete/${cropCode}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);

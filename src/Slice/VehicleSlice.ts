@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import VehicleModel from "../Models/VehicleModel";
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 const initialState : VehicleModel[] =[];
 
@@ -8,12 +9,17 @@ const api = axios.create({
     baseURL : "http://localhost:3000/"
 })
 
+const token = Cookies.get('token');
 
  export const saveVehicleState = createAsyncThunk(
     'vehicle/saveVehicleState',
     async(vehicle:VehicleModel)=>{
         try{
-            const response = await api.post('vehicle/save',vehicle);
+            const response = await api.post('vehicle/save',vehicle,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -25,7 +31,11 @@ export const updateVehicleState = createAsyncThunk(
     'vehicle/updateVehicleState',
     async(vehicle:VehicleModel)=>{
         try{
-            const response = await api.patch('vehicle/update',vehicle);
+            const response = await api.patch('vehicle/update',vehicle,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -37,7 +47,11 @@ export const fetchVehicleState = createAsyncThunk(
     'vehicle/fetchVehicleState',
     async()=>{
         try{
-            const response = await api.get('vehicle/getall');
+            const response = await api.get('vehicle/getall',{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -49,7 +63,11 @@ export const deleteVehicleState = createAsyncThunk(
     'vehicle/deleteVehicleState',
     async(vehicleCode:string)=>{
         try{
-            const response = await api.delete(`vehicle/delete/${vehicleCode}`);
+            const response = await api.delete(`vehicle/delete/${vehicleCode}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);

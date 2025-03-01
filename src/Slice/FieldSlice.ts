@@ -1,6 +1,7 @@
 import axios from "axios";
 import FieldModel from "../Models/FieldModel";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import Cookies from 'js-cookie';
 
 export const initialState : FieldModel[] =[];
 
@@ -8,12 +9,18 @@ const api = axios.create({
     baseURL : "http://localhost:3000/"
 })
 
+const token = Cookies.get('token');
+
 export const saveFieldState = createAsyncThunk(
     'field/saveFieldState',
     async(field:FieldModel)=>{
 
         try{
-            const response = await api.post('field/save',field);
+            const response = await api.post('field/save',field,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -24,7 +31,11 @@ export const fetchFieldState = createAsyncThunk(
     'field/fetchFieldState',
     async()=>{
         try{
-            const response = await api.get('field/getall');   
+            const response = await api.get('field/getall',{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -35,7 +46,11 @@ export const updateFieldState = createAsyncThunk(
     'field/updateFieldState',
     async(field:FieldModel)=>{
         try{
-            const response = await api.patch('field/update',field);
+            const response = await api.patch('field/update',field,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);
@@ -47,7 +62,11 @@ export const deleteFieldState = createAsyncThunk(
     'field/deleteFieldState',
     async(code:string)=>{
         try{
-            const response = await api.delete(`field/delete/${code}`);
+            const response = await api.delete(`field/delete/${code}`,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch(e){
             console.log(e);

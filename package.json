@@ -12,9 +12,11 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
     "@tailwindcss/vite": "^4.0.4",
+    "@types/js-cookie": "^3.0.6",
     "axios": "^1.7.9",
     "base64-encode-file": "^1.0.7",
     "framer-motion": "^12.4.7",
+    "js-cookie": "^3.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-green-shadow": "file:",
